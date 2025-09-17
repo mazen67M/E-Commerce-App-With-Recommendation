@@ -15,6 +15,7 @@ namespace Ecommerce.Application.DTOs
         public PaymentMethod PaymentMethod { get; set; }
         public string ShippingAddress { get; set; }
         public decimal TotalAmount { get; set; }
+        public int ItemsCount { get; set; }
         public string TrackingNumber { get; set; } // From Shipping
     }
 }

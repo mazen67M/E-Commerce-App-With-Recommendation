@@ -9,8 +9,8 @@ namespace Ecommerce.Application.DTOs
     public class PromoCodeDto
     {
         public int PromoCodeID { get; set; }
-        public string Code { get; set; }
-        public string Description { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public string? Description { get; set; }
         public decimal DiscountValue { get; set; }
         public int MaxUsage { get; set; }
         public int UsedCount { get; set; }

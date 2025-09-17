@@ -14,7 +14,7 @@ namespace Ecommerce.Core.Entities
 
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
-        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public OrderStatus Status { get; set; } = OrderStatus.pending;
 
         public PaymentMethod PaymentMethod { get; set; }
 
@@ -28,5 +28,10 @@ namespace Ecommerce.Core.Entities
         public virtual Shipping Shipping { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual ICollection<OrderPromoCode> OrderPromoCodes { get; set; } = new List<OrderPromoCode>();
+
+        //public static implicit operator Order(Order v)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

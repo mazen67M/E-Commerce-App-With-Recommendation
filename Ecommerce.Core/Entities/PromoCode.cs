@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Ecommerce.Core.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ecommerce.Core.Entities
@@ -11,6 +12,8 @@ namespace Ecommerce.Core.Entities
         public string Code { get; set; }
 
         public string Description { get; set; }
+
+        public DiscountType DiscountType { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal DiscountValue { get; set; }

@@ -1,7 +1,12 @@
-﻿using Ecommerce.Core.Entities;
+﻿using Ecommerce.Application.Mapping;
+using Ecommerce.Application.Services.Implementations;
+using Ecommerce.Application.Services.Interfaces;
+using Ecommerce.Core.Entities;
 using Ecommerce.Core.Interfaces;
 using Ecommerce.Infrastructure.Data;
 using Ecommerce.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 // MVC + Razor Pages
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+// AutoMapper Registration
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // Database
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -28,16 +36,49 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// Repositories
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
-// Cookies (optional but recommended)
+// Cookies 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
+// Unit of Work & Repositories Registration
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); //  Unit of Work 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); // Register the generic repository ONCE
+
+// Register all specific repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IShippingRepository, ShippingRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IInventoryLogRepository, InventoryLogRepository>();
+builder.Services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
+builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
+
+
+// Business Services Registration
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IDiscountService, DiscountService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IWishlistService, WishlistService>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+builder.Services.AddScoped<IShippingService, ShippingService>();
+builder.Services.AddScoped<ILoggingService, LoggingService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<IValidationService, ValidationService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 var app = builder.Build();
 
 // Middleware
@@ -65,3 +106,12 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+// CreateHostBuilder for EF Core Design-Time Tools
+// This is critical for `dotnet ef migrations add` to work correctly.
+static IHostBuilder CreateHostBuilder(string[] args) =>
+    Host.CreateDefaultBuilder(args)
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder.UseStartup<Program>();
+        });

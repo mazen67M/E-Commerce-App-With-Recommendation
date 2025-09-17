@@ -12,5 +12,7 @@ namespace Ecommerce.Application.DTOs
         public string Name { get; set; }
         public int? ParentCategoryID { get; set; }
         public string ParentCategoryName { get; set; }
+        public List<CategoryDto> SubCategories { get; set; } = new();
+
     }
 }

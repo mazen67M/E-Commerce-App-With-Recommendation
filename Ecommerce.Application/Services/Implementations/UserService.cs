@@ -1,0 +1,102 @@
+﻿using AutoMapper;
+using Ecommerce.Application.DTOs;
+using Ecommerce.Application.Services.Interfaces;
+using Ecommerce.Core.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ecommerce.Application.Services.Implementations
+{
+    public class UserService : IUserService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserRepository _userRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapper;
+
+        public UserService(IUnitOfWork unitOfWork, IUserRepository userRepository, IOrderRepository orderRepository, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _userRepository = userRepository;
+            _orderRepository = orderRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<OrderDto>> GetUserHistoryAsync(string userId)
+        {
+            return await GetUserOrderHistoryAsync(userId);
+        }
+
+        public async Task<IEnumerable<OrderDto>> GetUserOrderHistoryAsync(string userId)
+        {
+            var orders = await _orderRepository.GetOrdersByUserIdAsync(userId);
+            return orders.Select(o => new OrderDto
+            {
+                OrderID = o.OrderID,
+                OrderDate = o.OrderDate,
+                Status = o.Status,
+                PaymentMethod = o.PaymentMethod,
+                ShippingAddress = o.ShippingAddress,
+                TotalAmount = o.TotalAmount,
+                ItemsCount = o.OrderItems.Count
+            });
+        }
+
+        public async Task<UserDto> GetUserProfileAsync(string userId)
+        {
+            // userId is string, but GetByIdAsync expects int.
+            // You need to convert userId to int.
+            if (!int.TryParse(userId, out int userIdInt))
+                return null;
+
+            var user = await _userRepository.GetByIdAsync(userIdInt);
+            if (user == null)
+                return null;
+
+            return new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                AddressLine1 = user.AddressLine1,
+                Country = user.Country,
+                CreatedAt = user.CreatedAt
+            };
+        }
+
+        public Task<decimal> GetUserTotalSpentAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsUserAdminAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateUserProfileAsync(string userId, UserDto userDto)
+        {
+            // userId is string, but GetByIdAsync expects int.
+            if (!int.TryParse(userId, out int userIdInt))
+                return;
+
+            var user = await _userRepository.GetByIdAsync(userIdInt);
+            if (user != null)
+            {
+                user.FirstName = userDto.FirstName;
+                user.LastName = userDto.LastName;
+                user.PhoneNumber = userDto.PhoneNumber;
+                user.AddressLine1 = userDto.AddressLine1;
+                user.Country = userDto.Country;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                await _userRepository.UpdateAsync(user);
+            }
+        }
+    }
+}

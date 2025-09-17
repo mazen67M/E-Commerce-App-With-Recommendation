@@ -13,6 +13,4 @@ namespace Ecommerce.Core.Enums
         BankTransfer,
         CashOnDelivery
     }
-
-
 }

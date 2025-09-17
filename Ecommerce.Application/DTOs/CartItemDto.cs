@@ -8,6 +8,7 @@ namespace Ecommerce.Application.DTOs
 {
     public class CartItemDto
     {
+        public int CartItemID { get; set; }
         public int ProductID { get; set; }
         public string ProductName { get; set; }
         public string ImageURL { get; set; }

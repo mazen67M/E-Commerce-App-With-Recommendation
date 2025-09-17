@@ -13,5 +13,10 @@ namespace Ecommerce.Core.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public virtual ICollection<CartItem> Items { get; set; } = new List<CartItem>();
+
+        public static implicit operator Task<object>(Cart v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
