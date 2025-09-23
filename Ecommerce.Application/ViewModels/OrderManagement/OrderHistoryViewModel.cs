@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Application.DTOs;
+using Ecommerce.Application.DTOs.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Ecommerce.Application.ViewModels.OrderManagement
 {
     public class OrderHistoryViewModel
     {
-        public List<OrderSummaryDto> Orders { get; set; } = new();
+        public List<OrderDetailsDto> Orders { get; set; } = new();
     }
 
 }

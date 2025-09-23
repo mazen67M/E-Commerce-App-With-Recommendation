@@ -5,10 +5,10 @@ using Ecommerce.Core.Entities;
 using Ecommerce.Core.Interfaces;
 using Ecommerce.Infrastructure.Data;
 using Ecommerce.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using AuthenticationService = Ecommerce.Application.Services.Implementations.AuthenticationService;
+using IAuthenticationService = Ecommerce.Application.Services.Interfaces.IAuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 

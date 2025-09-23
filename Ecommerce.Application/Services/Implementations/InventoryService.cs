@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Ecommerce.Application.DTOs;
+using Ecommerce.Application.DTOs.Inventory;
+using Ecommerce.Application.DTOs.Products;
 using Ecommerce.Application.Services.Interfaces;
 using Ecommerce.Core.Entities;
 using Ecommerce.Core.Enums;

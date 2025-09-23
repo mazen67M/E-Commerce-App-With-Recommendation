@@ -13,5 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Ecommerce.Core\Ecommerce.Core.csproj" />
   </ItemGroup>
-
+	
+    <ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 </Project>

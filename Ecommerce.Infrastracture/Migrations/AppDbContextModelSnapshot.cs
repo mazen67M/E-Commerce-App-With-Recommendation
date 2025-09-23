@@ -453,6 +453,9 @@ namespace Ecommerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DiscountType")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("DiscountValue")
                         .HasColumnType("decimal(18,2)");
 

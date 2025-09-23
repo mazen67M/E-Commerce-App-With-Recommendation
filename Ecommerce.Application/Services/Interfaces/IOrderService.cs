@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.DTOs;
+﻿using Ecommerce.Application.DTOs.Order;
 using Ecommerce.Core.Enums;
 using System;
 using System.Collections.Generic;

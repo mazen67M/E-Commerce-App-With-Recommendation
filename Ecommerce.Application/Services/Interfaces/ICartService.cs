@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.DTOs;
+﻿using Ecommerce.Application.DTOs.Cart;
 
 namespace Ecommerce.Application.Services.Interfaces
 {

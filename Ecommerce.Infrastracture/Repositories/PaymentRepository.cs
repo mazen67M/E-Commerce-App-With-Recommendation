@@ -32,7 +32,7 @@ namespace Ecommerce.Infrastructure.Repositories
         public async Task<IEnumerable<Payment>> GetPaymentsByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
             return await _context.Payments
-                .Where(p => p.PaymentStatus == status)
+                .Where(p => p.PaymentDate >= startDate && p.PaymentDate <= endDate)
                 .ToListAsync();
         }
 

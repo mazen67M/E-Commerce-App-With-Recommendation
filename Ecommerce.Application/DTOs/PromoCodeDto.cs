@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ecommerce.Core.Enums;
+using System;
 
-namespace Ecommerce.Application.DTOs
+namespace Ecommerce.Application.DTOs.Promotion
 {
     public class PromoCodeDto
     {
         public int PromoCodeID { get; set; }
         public string Code { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public DiscountType DiscountType { get; set; }
+
         public decimal DiscountValue { get; set; }
         public int MaxUsage { get; set; }
         public int UsedCount { get; set; }

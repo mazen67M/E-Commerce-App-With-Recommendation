@@ -1,4 +1,5 @@
-﻿using Ecommerce.Application.DTOs;
+﻿using Ecommerce.Application.DTOs.Order;
+using Ecommerce.Application.DTOs.User;
 using Ecommerce.Application.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;

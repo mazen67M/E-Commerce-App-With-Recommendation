@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Ecommerce.Application.DTOs;
+using Ecommerce.Application.DTOs.Cart;
+using Ecommerce.Application.DTOs.Promotion;
 using Ecommerce.Application.Services.Interfaces;
 using Ecommerce.Core.Interfaces;
 using System;
@@ -81,5 +83,11 @@ namespace Ecommerce.Application.Services.Implementations
                    promoCode.ExpirationDate > DateTime.UtcNow &&
                    promoCode.UsedCount < promoCode.MaxUsage;
         }
+
+        Task<IEnumerable<DiscountRuleDto>> IDiscountService.GetApplicableDiscountsAsync(CartDto cart)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

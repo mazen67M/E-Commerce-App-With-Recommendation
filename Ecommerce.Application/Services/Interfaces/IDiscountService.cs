@@ -1,4 +1,6 @@
 ﻿using Ecommerce.Application.DTOs;
+using Ecommerce.Application.DTOs.Cart;
+using Ecommerce.Application.DTOs.Promotion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
