@@ -59,6 +59,11 @@ namespace Ecommerce.Application.Mapping
                     (src.User != null ? src.User.FirstName : "") + " " + (src.User != null ? src.User.LastName : "")));
             CreateMap<AddReviewDto, Review>();
 
+
+            CreateMap<LoginViewModel, LoginDto>();
+            CreateMap<RegisterViewModel, RegisterDto>();
+
+
             // --- Inventory Mappings ---
             CreateMap<InventoryLog, InventoryLogDto>();
 

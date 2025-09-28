@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml"; // Inherits the main site layout
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h4>My Account</h4>
+        <div class="list-group">
+            <a asp-area="Profile" asp-controller="Dashboard" asp-action="Index" class="list-group-item list-group-item-action">Dashboard</a>
+            <a asp-area="Profile" asp-controller="OrderHistory" asp-action="Index" class="list-group-item list-group-item-action">Order History</a>
+            <a asp-area="Profile" asp-controller="Wishlist" asp-action="Index" class="list-group-item list-group-item-action">My Wishlist</a>
+            <a asp-area="" asp-controller="Account" asp-action="Profile" class="list-group-item list-group-item-action">Profile Details</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        @RenderBody()
+    </div>
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

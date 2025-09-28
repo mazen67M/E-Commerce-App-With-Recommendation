@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Application.DTOs.Products;
+using Ecommerce.Application.DTOs.Wishlist;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Ecommerce.Application.ViewModels.User___Account
 {
     public class WishlistViewModel
     {
-        public List<ProductDto> Items { get; set; } = new();
+        public List<WishlistItemDto> Items { get; set; } = new();
     }
 }

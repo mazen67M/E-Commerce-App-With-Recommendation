@@ -6,7 +6,7 @@ namespace Ecommerce.Application.Services.Interfaces
     public interface IAuthenticationService
     {
         Task<AuthResultDto> RegisterAsync(RegisterViewModel registerDto);
-        Task<AuthResultDto> LoginAsync(LoginViewModel loginDto);
+        Task<AuthResultDto> LoginAsync(LoginDto loginDto);
         Task LogoutAsync();
         Task<bool> ConfirmEmailAsync(string userId, string token);
     }

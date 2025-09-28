@@ -1,0 +1,29 @@
+﻿@using Ecommerce.Application.ViewModels.User___Account
+@model WishlistViewModel
+@{
+    ViewData["Title"] = "My Wishlist";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.Items.Any())
+{
+    <div class="row">
+        @foreach (var item in Model.Items)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.ProductName</h5>
+                        <p class="card-text">@item.Price.ToString("C")</p>
+                        <a asp-controller="Home" asp-action="ProductDetails" asp-area="" asp-route-id="@item.ProductID" class="btn btn-primary">View Product</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Your wishlist is empty.</p>
+}

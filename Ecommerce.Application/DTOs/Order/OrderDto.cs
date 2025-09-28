@@ -16,6 +16,6 @@ namespace Ecommerce.Application.DTOs.Order
         public string ShippingAddress { get; set; }
         public decimal TotalAmount { get; set; }
         public int ItemsCount { get; set; }
-        public string TrackingNumber { get; set; } // From Shipping
+        public string TrackingNumber { get; set; } 
     }
 }

@@ -1,0 +1,40 @@
+﻿@using Ecommerce.Application.ViewModels.OrderManagement
+@model OrderHistoryViewModel
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.Orders.Any())
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>#@order.OrderID</td>
+                    <td>@order.OrderDate.ToShortDateString()</td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                    <td><span class="badge bg-info">@order.Status</span></td>
+                    <td>
+                        <a asp-action="Details" asp-route-orderId="@order.OrderID" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You have not placed any orders yet.</p>
+}

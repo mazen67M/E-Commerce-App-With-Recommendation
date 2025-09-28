@@ -9,13 +9,13 @@ namespace Ecommerce.Core.Entities
         public string FirstName { get; set; }
 
         [MaxLength(50)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [MaxLength(200)]
-        public string AddressLine1 { get; set; }
+        public string? AddressLine1 { get; set; }
 
         [MaxLength(100)]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

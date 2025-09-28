@@ -1,0 +1,31 @@
+﻿@using Ecommerce.Application.ViewModels.User___Account
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Your Account Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">First Name</dt>
+        <dd class="col-sm-9">@Model.FirstName</dd>
+
+        <dt class="col-sm-3">Last Name</dt>
+        <dd class="col-sm-9">@Model.LastName</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Phone Number</dt>
+        <dd class="col-sm-9">@(Model.PhoneNumber ?? "Not provided")</dd>
+
+        <dt class="col-sm-3">Member Since</dt>
+        <dd class="col-sm-9">@Model.CreatedAt.ToShortDateString()</dd>
+    </dl>
+    <div>
+        <a asp-action="History" asp-controller="Order" class="btn btn-primary">View Order History</a>
+    </div>
+</div>

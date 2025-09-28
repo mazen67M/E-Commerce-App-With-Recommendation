@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Ecoomerce.Web.Controllers
+namespace Ecoomerce.Web.Areas.Reporting.Controllers
 {
-    public class AdminController : Controller
+    public class SalesController : Controller
     {
         public IActionResult Index()
         {

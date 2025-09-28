@@ -43,7 +43,7 @@ namespace Ecommerce.Application.Services.Implementations
             return new AuthResultDto { IsSuccess = true, UserId = user.Id, Message = "Registration successful. Please check your email to confirm your account." };
         }
 
-        public async Task<AuthResultDto> LoginAsync(LoginViewModel loginDto)
+        public async Task<AuthResultDto> LoginAsync(LoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
             if (user == null)
@@ -79,6 +79,6 @@ namespace Ecommerce.Application.Services.Implementations
             }
             var result = await _userManager.ConfirmEmailAsync(user, token);
             return result.Succeeded;
-        }
+        }     
     }
 }

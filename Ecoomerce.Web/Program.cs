@@ -99,13 +99,54 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Area Routes ProfileArea
+app.MapControllerRoute(
+    name: "ProfileArea",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
+// Area Routes ReportingArea
+app.MapControllerRoute(
+    name: "ReportingArea",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
+
+// Area Routes AdminArea
+app.MapControllerRoute(
+    name: "AdminArea",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
 // Routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+
+// --- Run the Database Seeder ---
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Get the necessary services
+        var context = services.GetRequiredService<AppDbContext>();
+
+        // Ensure the database is created
+        await context.Database.MigrateAsync();
+
+        // Call the initializer
+        await DbInitializer.InitializeAsync(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
+
 app.Run();
+
+
 
 // CreateHostBuilder for EF Core Design-Time Tools
 // This is critical for `dotnet ef migrations add` to work correctly.

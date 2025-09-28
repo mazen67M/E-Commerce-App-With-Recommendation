@@ -80,7 +80,7 @@ namespace Ecommerce.Application.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public async Task UpdateUserProfileAsync(string userId, UserDto userDto)
+        public async Task UpdateUserProfileAsync(string userId, UpdateUserDto userDto)
         {
             // userId is string, but GetByIdAsync expects int.
             if (!int.TryParse(userId, out int userIdInt))
