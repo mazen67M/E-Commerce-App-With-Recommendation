@@ -10,7 +10,7 @@ namespace Ecommerce.Application.ViewModels.Admin_Panel
     public class ManageProductsViewModel
     {
         public List<ProductDto> Products { get; set; } = new();
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; } 
         public int? CategoryId { get; set; }
         public int? BrandId { get; set; }
     }

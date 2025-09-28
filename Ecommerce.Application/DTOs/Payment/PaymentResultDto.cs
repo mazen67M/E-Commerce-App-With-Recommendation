@@ -13,9 +13,9 @@ namespace Ecommerce.Application.DTOs.Payment
         public bool IsSuccess { get; set; }
         public int? PaymentId { get; set; }
         public PaymentStatus Status { get; set; } // e.g., Paid, Failed, Pending
-        public string TransactionId { get; set; }
+        public string? TransactionId { get; set; }
         public decimal Amount { get; set; }
-        public string Message { get; set; } // e.g., "Payment successful", "Card declined"
-        public string RedirectUrl { get; set; }
+        public string Message { get; set; } = string.Empty; // Success or error message
+        public string RedirectUrl { get; set; } = string.Empty;
     }
 }

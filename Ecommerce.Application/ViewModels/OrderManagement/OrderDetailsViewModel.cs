@@ -14,10 +14,10 @@ namespace Ecommerce.Application.ViewModels.OrderManagement
         public DateTime OrderDate { get; set; }
         public OrderStatus Status { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
-        public string ShippingAddress { get; set; }
+        public string ShippingAddress { get; set; } = string.Empty;
         public decimal TotalAmount { get; set; }
-        public PaymentViewModel Payment { get; set; }
-        public ShippingViewModel Shipping { get; set; }
+        public PaymentViewModel? Payment { get; set; }
+        public ShippingViewModel? Shipping { get; set; }
         public List<OrderItemViewModel> Items { get; set; } = new();
         public List<ProductDto> RecommendedProducts { get; set; } = new(); // Post-purchase recommendations
     }

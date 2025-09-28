@@ -12,7 +12,7 @@ namespace Ecommerce.Application.ViewModels.OrderManagement
         public DateTime PaymentDate { get; set; }
         public decimal Amount { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-        public string TransactionID { get; set; }
+        public string? TransactionID { get; set; }
     }
 
 }

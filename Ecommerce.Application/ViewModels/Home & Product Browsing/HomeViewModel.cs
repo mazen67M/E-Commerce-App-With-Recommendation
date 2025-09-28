@@ -13,7 +13,7 @@ namespace Ecommerce.Application.ViewModels
         public List<ProductDto> FeaturedProducts { get; set; } = new();
         public List<ProductDto> TopSellingProducts { get; set; } = new();
         public List<ProductDto> NewArrivals { get; set; } = new();
-        public List<Category> Categories { get; set; } = new();
-        public List<Brand> Brands { get; set; } = new();
+        public List<CategoryDto> Categories { get; set; } = new();
+        public List<BrandDto> Brands { get; set; } = new();
     }
 }

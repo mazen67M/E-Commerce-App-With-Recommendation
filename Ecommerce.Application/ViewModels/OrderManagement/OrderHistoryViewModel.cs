@@ -10,7 +10,7 @@ namespace Ecommerce.Application.ViewModels.OrderManagement
 {
     public class OrderHistoryViewModel
     {
-        public List<OrderDetailsDto> Orders { get; set; } = new();
+        public List<OrderDto> Orders { get; set; } = new();
     }
 
 }

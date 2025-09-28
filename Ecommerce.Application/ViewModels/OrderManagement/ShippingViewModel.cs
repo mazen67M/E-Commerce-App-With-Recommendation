@@ -8,8 +8,8 @@ namespace Ecommerce.Application.ViewModels.OrderManagement
 {
     public class ShippingViewModel
     {
-        public string CourierName { get; set; }
-        public string TrackingNumber { get; set; }
+        public string? CourierName { get; set; }
+        public string? TrackingNumber { get; set; }
         public DateTime? ShippedDate { get; set; }
         public DateTime? DeliveryDate { get; set; }
     }

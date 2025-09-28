@@ -10,8 +10,8 @@ namespace Ecommerce.Application.DTOs.Cart
     {
         public int CartItemID { get; set; }
         public int ProductID { get; set; }
-        public string ProductName { get; set; }
-        public string ImageURL { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public string? ImageURL { get; set; } 
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
         public decimal Total => UnitPrice * Quantity;

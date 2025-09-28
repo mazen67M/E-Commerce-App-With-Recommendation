@@ -15,7 +15,7 @@ namespace Ecommerce.Application.DTOs.Order
         public DateTime OrderDate { get; set; }
         public OrderStatus Status { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
-        public string ShippingAddress { get; set; }
+        public string ShippingAddress { get; set; }= string.Empty;
         public decimal TotalAmount { get; set; }
 
         public List<OrderItemDto> Items { get; set; } = new();

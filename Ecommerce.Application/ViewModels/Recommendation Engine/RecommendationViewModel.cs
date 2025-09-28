@@ -9,7 +9,7 @@ namespace Ecommerce.Application.ViewModels.Recommendation_Engine
 {
     public class RecommendationViewModel
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         public List<ProductDto> Products { get; set; } = new();
     }
 }

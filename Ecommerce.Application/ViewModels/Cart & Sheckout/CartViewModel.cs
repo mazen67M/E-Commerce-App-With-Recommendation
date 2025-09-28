@@ -14,7 +14,7 @@ namespace Ecommerce.Application.ViewModels
         public decimal Tax { get; set; } // Could be calculated
         public decimal Shipping { get; set; }
         public decimal Total => SubTotal + Tax + Shipping;
-        public string PromoCode { get; set; }
+        public string? PromoCode { get; set; }
         public decimal Discount { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Ecommerce.Application.ViewModels.Admin_Panel
         public int TotalProducts { get; set; }
         public int TotalOrders { get; set; }
         public decimal TodayRevenue { get; set; }
-        public List<OrderDetailsDto> RecentOrders { get; set; } = new();
+        public List<OrderDto> RecentOrders { get; set; } = new(); // ✅ CHANGE: Use summary DTO
         public List<ProductDto> LowStockProducts { get; set; } = new();
     }
 }
