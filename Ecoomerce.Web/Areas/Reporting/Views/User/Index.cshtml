@@ -1,0 +1,137 @@
+@model IEnumerable<Ecommerce.Application.DTOs.Reporting.UserReportDto>
+@{
+    ViewData["Title"] = "User Report";
+    var summary = ViewBag.Summary as Ecommerce.Application.DTOs.Reporting.UserSummaryDto;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2>User Report</h2>
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+            
+            @if (summary != null)
+            {
+                <div class="row mb-4">
+                    <div class="col-md-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Users</h5>
+                                <h3 class="text-primary">@summary.TotalUsers</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">New This Month</h5>
+                                <h3 class="text-success">@summary.NewUsersThisMonth</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Users</h5>
+                                <h3 class="text-info">@summary.ActiveUsers</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">With Orders</h5>
+                                <h3 class="text-warning">@summary.UsersWithOrders</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Without Orders</h5>
+                                <h3 class="text-danger">@summary.UsersWithoutOrders</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Avg Orders/User</h5>
+                                <h3 class="text-secondary">@summary.AverageOrdersPerUser.ToString("F1")</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <form method="get" class="d-flex">
+                        <input type="date" name="startDate" class="form-control me-2" 
+                               value="@ViewBag.StartDate" placeholder="Start Date">
+                        <input type="date" name="endDate" class="form-control me-2" 
+                               value="@ViewBag.EndDate" placeholder="End Date">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </form>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="@Url.Action("Activity")" class="btn btn-info">User Activity</a>
+                    <a href="@Url.Action("RegistrationTrend")" class="btn btn-warning">Registration Trend</a>
+                    <a href="@Url.Action("TopCustomers")" class="btn btn-success">Top Customers</a>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Registration Date</th>
+                            <th>Total Orders</th>
+                            <th>Total Spent</th>
+                            <th>Last Order</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.UserId</td>
+                                <td>@item.Email</td>
+                                <td>@item.FirstName @item.LastName</td>
+                                <td>@item.RegistrationDate.ToString("MM/dd/yyyy")</td>
+                                <td>@item.TotalOrders</td>
+                                <td>@item.TotalSpent.ToString("C")</td>
+                                <td>@(item.LastOrderDate?.ToString("MM/dd/yyyy") ?? "Never")</td>
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            @if (!Model.Any())
+            {
+                <div class="text-center py-4">
+                    <p class="text-muted">No user data available for the selected period.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

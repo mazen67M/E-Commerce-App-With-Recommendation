@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Mapping;
+using Ecommerce.Application.Mapping;
 using Ecommerce.Application.Services.Implementations;
 using Ecommerce.Application.Services.Interfaces;
 using Ecommerce.Core.Entities;
@@ -79,6 +79,11 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<IValidationService, ValidationService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+
+// Reporting Services Registration
+builder.Services.AddScoped<IInventoryReportService, InventoryReportService>();
+builder.Services.AddScoped<ISalesReportService, SalesReportService>();
+builder.Services.AddScoped<IUserReportService, UserReportService>();
 var app = builder.Build();
 
 // Middleware

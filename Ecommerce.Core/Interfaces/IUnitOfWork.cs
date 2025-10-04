@@ -1,4 +1,4 @@
-﻿using Ecommerce.Infrastructure.Repositories;
+using Ecommerce.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,21 @@ namespace Ecommerce.Core.Interfaces
 {
     public interface IUnitOfWork : IDisposable , IAsyncDisposable
     {
+        // Repository Properties
+        IUserRepository Users { get; }
+        IProductRepository Products { get; }
+        IOrderRepository Orders { get; }
+        IInventoryLogRepository InventoryLogs { get; }
+        ICartRepository Carts { get; }
+        ICategoryRepository Categories { get; }
+        IBrandRepository Brands { get; }
+        IPaymentRepository Payments { get; }
+        IShippingRepository Shippings { get; }
+        IReviewRepository Reviews { get; }
+        IPromoCodeRepository PromoCodes { get; }
+        IWishlistRepository Wishlists { get; }
+        
+        // Transaction Methods
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

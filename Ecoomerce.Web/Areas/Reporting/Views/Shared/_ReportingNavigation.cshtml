@@ -1,0 +1,40 @@
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Reporting Dashboard</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Inventory Reports</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="@Url.Action("Index", "Inventory", new { area = "Reporting" })" class="btn btn-link p-0">Inventory Overview</a></li>
+                            <li><a href="@Url.Action("LowStock", "Inventory", new { area = "Reporting" })" class="btn btn-link p-0">Low Stock Products</a></li>
+                            <li><a href="@Url.Action("OutOfStock", "Inventory", new { area = "Reporting" })" class="btn btn-link p-0">Out of Stock Products</a></li>
+                            <li><a href="@Url.Action("InventoryLogs", "Inventory", new { area = "Reporting" })" class="btn btn-link p-0">Inventory Logs</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Sales Reports</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="@Url.Action("Index", "Sales", new { area = "Reporting" })" class="btn btn-link p-0">Sales Overview</a></li>
+                            <li><a href="@Url.Action("DailySales", "Sales", new { area = "Reporting" })" class="btn btn-link p-0">Daily Sales</a></li>
+                            <li><a href="@Url.Action("TopProducts", "Sales", new { area = "Reporting" })" class="btn btn-link p-0">Top Selling Products</a></li>
+                            <li><a href="@Url.Action("Revenue", "Sales", new { area = "Reporting" })" class="btn btn-link p-0">Revenue Report</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>User Reports</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="@Url.Action("Index", "User", new { area = "Reporting" })" class="btn btn-link p-0">User Overview</a></li>
+                            <li><a href="@Url.Action("Activity", "User", new { area = "Reporting" })" class="btn btn-link p-0">User Activity</a></li>
+                            <li><a href="@Url.Action("RegistrationTrend", "User", new { area = "Reporting" })" class="btn btn-link p-0">Registration Trend</a></li>
+                            <li><a href="@Url.Action("TopCustomers", "User", new { area = "Reporting" })" class="btn btn-link p-0">Top Customers</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

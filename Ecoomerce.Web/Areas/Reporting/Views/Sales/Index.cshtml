@@ -1,0 +1,116 @@
+@model IEnumerable<Ecommerce.Application.DTOs.Reporting.SalesReportDto>
+@{
+    ViewData["Title"] = "Sales Report";
+    var summary = ViewBag.Summary as Ecommerce.Application.DTOs.Reporting.SalesSummaryDto;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2>Sales Report</h2>
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+            
+            @if (summary != null)
+            {
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Revenue</h5>
+                                <h3 class="text-success">@summary.TotalRevenue.ToString("C")</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Orders</h5>
+                                <h3 class="text-primary">@summary.TotalOrders</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Average Order Value</h5>
+                                <h3 class="text-info">@summary.AverageOrderValue.ToString("C")</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Top Product Sales</h5>
+                                <h3 class="text-warning">@(summary.TopSellingProducts.FirstOrDefault()?.QuantitySold ?? 0)</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <form method="get" class="d-flex">
+                        <input type="date" name="startDate" class="form-control me-2" 
+                               value="@ViewBag.StartDate" placeholder="Start Date">
+                        <input type="date" name="endDate" class="form-control me-2" 
+                               value="@ViewBag.EndDate" placeholder="End Date">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </form>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="@Url.Action("DailySales")" class="btn btn-info">Daily Sales</a>
+                    <a href="@Url.Action("TopProducts")" class="btn btn-warning">Top Products</a>
+                    <a href="@Url.Action("Revenue")" class="btn btn-success">Revenue</a>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Email</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Payment Method</th>
+                            <th>Items</th>
+                            <th>Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.OrderId</td>
+                                <td>@item.UserEmail</td>
+                                <td>@item.OrderDate.ToString("MM/dd/yyyy")</td>
+                                <td>
+                                    <span class="badge @(item.Status.ToString() == "completed" ? "bg-success" : 
+                                                        item.Status.ToString() == "pending" ? "bg-warning" : 
+                                                        item.Status.ToString() == "cancelled" ? "bg-danger" : "bg-secondary")">
+                                        @item.Status
+                                    </span>
+                                </td>
+                                <td>@item.PaymentMethod</td>
+                                <td>@item.ItemCount</td>
+                                <td>@item.TotalAmount.ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            @if (!Model.Any())
+            {
+                <div class="text-center py-4">
+                    <p class="text-muted">No sales data available for the selected period.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

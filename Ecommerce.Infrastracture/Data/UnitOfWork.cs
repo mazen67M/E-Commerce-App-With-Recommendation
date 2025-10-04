@@ -1,4 +1,5 @@
-﻿using Ecommerce.Core.Interfaces;
+using Ecommerce.Core.Interfaces;
+using Ecommerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,38 @@ namespace Ecommerce.Infrastructure.Data
         private IDbContextTransaction? _transaction;
         private bool _disposed = false;
 
+        // Repository instances
+        private IUserRepository? _users;
+        private IProductRepository? _products;
+        private IOrderRepository? _orders;
+        private IInventoryLogRepository? _inventoryLogs;
+        private ICartRepository? _carts;
+        private ICategoryRepository? _categories;
+        private IBrandRepository? _brands;
+        private IPaymentRepository? _payments;
+        private IShippingRepository? _shippings;
+        private IReviewRepository? _reviews;
+        private IPromoCodeRepository? _promoCodes;
+        private IWishlistRepository? _wishlists;
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+
+        // Repository Properties
+        public IUserRepository Users => _users ??= new UserRepository(_context);
+        public IProductRepository Products => _products ??= new ProductRepository(_context);
+        public IOrderRepository Orders => _orders ??= new OrderRepository(_context);
+        public IInventoryLogRepository InventoryLogs => _inventoryLogs ??= new InventoryLogRepository(_context);
+        public ICartRepository Carts => _carts ??= new CartRepository(_context);
+        public ICategoryRepository Categories => _categories ??= new CategoryRepository(_context);
+        public IBrandRepository Brands => _brands ??= new BrandRepository(_context);
+        public IPaymentRepository Payments => _payments ??= new PaymentRepository(_context);
+        public IShippingRepository Shippings => _shippings ??= new ShippingRepository(_context);
+        public IReviewRepository Reviews => _reviews ??= new ReviewRepository(_context);
+        public IPromoCodeRepository PromoCodes => _promoCodes ??= new PromoCodeRepository(_context);
+        public IWishlistRepository Wishlists => _wishlists ??= new WishlistRepository(_context);
 
         // Done
         public async Task BeginTransactionAsync()

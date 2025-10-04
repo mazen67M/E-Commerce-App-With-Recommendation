@@ -1,0 +1,125 @@
+@model IEnumerable<Ecommerce.Application.DTOs.Reporting.InventoryReportDto>
+@{
+    ViewData["Title"] = "Inventory Report";
+    var summary = ViewBag.Summary as Ecommerce.Application.DTOs.Reporting.InventorySummaryDto;
+}
+
+<div class="container-fluid">
+    @await Html.PartialAsync("_ReportingNavigation")
+    
+    <div class="row">
+        <div class="col-12">
+            <h2>Inventory Report</h2>
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+            
+            @if (summary != null)
+            {
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Products</h5>
+                                <h3 class="text-primary">@summary.TotalProducts</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Low Stock</h5>
+                                <h3 class="text-warning">@summary.LowStockProducts</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Out of Stock</h5>
+                                <h3 class="text-danger">@summary.OutOfStockProducts</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Value</h5>
+                                <h3 class="text-success">@summary.TotalInventoryValue.ToString("C")</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <form method="get" class="d-flex">
+                        <input type="number" name="lowStockThreshold" class="form-control me-2" 
+                               placeholder="Low Stock Threshold" value="@ViewBag.LowStockThreshold" min="0">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </form>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="@Url.Action("LowStock")" class="btn btn-warning">Low Stock</a>
+                    <a href="@Url.Action("OutOfStock")" class="btn btn-danger">Out of Stock</a>
+                    <a href="@Url.Action("InventoryLogs")" class="btn btn-info">Inventory Logs</a>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Brand</th>
+                            <th>Current Stock</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="@(item.CurrentStock == 0 ? "table-danger" : item.IsLowStock ? "table-warning" : "")">
+                                <td>@item.ProductId</td>
+                                <td>@item.ProductName</td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.BrandName</td>
+                                <td>
+                                    <span class="badge @(item.CurrentStock == 0 ? "bg-danger" : item.IsLowStock ? "bg-warning" : "bg-success")">
+                                        @item.CurrentStock
+                                    </span>
+                                </td>
+                                <td>@item.Price.ToString("C")</td>
+                                <td>
+                                    @if (item.IsAvailable)
+                                    {
+                                        <span class="badge bg-success">Available</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Unavailable</span>
+                                    }
+                                </td>
+                                <td>@item.LastUpdated.ToString("MM/dd/yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            @if (!Model.Any())
+            {
+                <div class="text-center py-4">
+                    <p class="text-muted">No inventory data available.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
