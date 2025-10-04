@@ -5,6 +5,7 @@ using Ecommerce.Core.Entities;
 using Ecommerce.Core.Interfaces;
 using Ecommerce.Infrastructure.Data;
 using Ecommerce.Infrastructure.Repositories;
+using Ecommerce.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AuthenticationService = Ecommerce.Application.Services.Implementations.AuthenticationService;
@@ -84,6 +85,10 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IInventoryReportService, InventoryReportService>();
 builder.Services.AddScoped<ISalesReportService, SalesReportService>();
 builder.Services.AddScoped<IUserReportService, UserReportService>();
+
+// Email Service Registration
+builder.Services.AddTransient<IEmailSenderService, SmtpEmailSenderService>();
+
 var app = builder.Build();
 
 // Middleware
@@ -96,7 +101,6 @@ else
 {
     app.UseDeveloperExceptionPage();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

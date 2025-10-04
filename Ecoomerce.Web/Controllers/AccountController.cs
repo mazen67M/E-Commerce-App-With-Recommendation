@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Ecommerce.Application.DTOs.Auth;
 using Ecommerce.Application.Services.Interfaces;
 using Ecommerce.Application.ViewModels.Forms___Input_Models;
@@ -18,17 +18,20 @@ namespace Ecoomerce.Web.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<AccountController> _logger;
         private readonly IUserService _userService;
+        private readonly IEmailSenderService _emailSender;
 
         public AccountController(
             IAuthenticationService authService,
             IMapper mapper,
             ILogger<AccountController> logger,
-            IUserService userService)
+            IUserService userService,
+            IEmailSenderService emailSender)
         {
             _authService = authService;
             _mapper = mapper;
             _logger = logger;
             _userService = userService;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -49,7 +52,27 @@ namespace Ecoomerce.Web.Controllers
 
             if (result.IsSuccess)
             {
-                _logger.LogInformation($"New User Registed With Email: {model.Email}");
+                _logger.LogInformation($"New User Registered With Email: {model.Email}");
+
+                // Generate email confirmation token
+                var user = await _authService.GetUserByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    var token = await _authService.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account",
+                        new { userId = user.Id, token = token }, Request.Scheme);
+
+                    // Send confirmation email
+                    var emailBody = $@"
+                        <h2>Welcome to Our ECommerce!</h2>
+                        <p>Please confirm your email by clicking the link below:</p>
+                        <a href='{confirmationLink}'>Confirm Email</a>
+                    ";
+                    await _emailSender.SendEmailAsync(model.Email, "Confirm Your Email", emailBody);
+
+                    TempData["Message"] = "Registration successful! Please check your email to confirm your account.";
+                }
+
                 return RedirectToAction("Login", "Account");
             }
             ModelState.AddModelError(string.Empty, result.Message);
@@ -118,6 +141,25 @@ namespace Ecoomerce.Web.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return BadRequest("Invalid email confirmation request.");
+            }
+
+            var result = await _authService.ConfirmEmailAsync(userId, token);
+            if (result)
+            {
+                TempData["Message"] = "Email confirmed successfully! You can now log in.";
+                return RedirectToAction("Login", "Account");
+            }
+
+            TempData["Error"] = "Email confirmation failed. Please try again or contact support.";
+            return RedirectToAction("Login", "Account");
         }
     }
 }

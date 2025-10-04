@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Ecommerce.Application.DTOs.Auth;
 using Ecommerce.Application.Services.Interfaces;
 using Ecommerce.Application.ViewModels.Forms___Input_Models;
@@ -64,7 +64,6 @@ namespace Ecommerce.Application.Services.Implementations
 
             return new AuthResultDto { IsSuccess = false, Message = message };
         }
-
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
@@ -79,6 +78,21 @@ namespace Ecommerce.Application.Services.Implementations
             }
             var result = await _userManager.ConfirmEmailAsync(user, token);
             return result.Succeeded;
-        }     
+        }
+
+        public async Task<ApplicationUser?> GetUserByEmailAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ArgumentException("User not found", nameof(userId));
+            }
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
     }
 }

@@ -1,42 +1,85 @@
-﻿@using Ecommerce.Application.ViewModels.Forms___Input_Models
+@using Ecommerce.Application.ViewModels.Forms___Input_Models
 @model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-6">
-        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="FirstName" class="form-control" />
-                <label asp-for="FirstName"></label>
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-success bg-gradient text-white text-center rounded-top-4">
+                    <h2 class="mb-0"><i class="bi bi-person-plus me-2"></i> Create Your Account</h2>
+                </div>
+                <div class="card-body px-4 py-4">
+                    <form asp-action="Register" method="post" asp-controller="Account" autocomplete="off">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-1 small mb-4"></div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input asp-for="Email" type="email" class="form-control" placeholder="you@email.com" aria-label="Email" />
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label fw-semibold">First Name</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input asp-for="FirstName" class="form-control" placeholder="First Name" aria-label="First Name" />
+                                </div>
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label fw-semibold">Last Name</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input asp-for="LastName" class="form-control" placeholder="Last Name" aria-label="Last Name" />
+                                </div>
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+                            <!-- Optional: Role or other fields here -->
+                            <div class="col-md-6 d-none">
+                                <label class="form-label fw-semibold">Role</label>
+                                <div class="input-group">
+                                    <!-- Placeholder for role selection -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Password" class="form-label fw-semibold">Password</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="Password" aria-label="Password" />
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" />
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg fw-semibold shadow-sm">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                <i class="bi bi-check-circle me-1"></i> Create Account
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-white text-center rounded-bottom-4 py-3">
+                    <span class="me-2">Already have an account?</span>
+                    <a asp-action="Login" class="fw-semibold text-success text-decoration-none">Login</a>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="LastName" class="form-control" />
-                <label asp-for="LastName"></label>
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Email" class="form-control" autocomplete="username" />
-                <label asp-for="Email"></label>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Password" class="form-control" autocomplete="new-password" />
-                <label asp-for="Password"></label>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
-                <label asp-for="ConfirmPassword"></label>
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
