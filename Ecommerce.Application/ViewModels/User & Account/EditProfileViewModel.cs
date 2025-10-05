@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ecommerce.Application.ViewModels.Admin_Panel
@@ -18,6 +18,8 @@ namespace Ecommerce.Application.ViewModels.Admin_Panel
         [Required]
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
+
+        public string? ImageUrl { get; set; }
 
         // For capturing which roles are selected for the user
         public List<string> UserRoles { get; set; } = new();

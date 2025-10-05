@@ -40,8 +40,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 // Cookies 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
 // Unit of Work & Repositories Registration
@@ -88,6 +88,9 @@ builder.Services.AddScoped<IUserReportService, UserReportService>();
 
 // Email Service Registration
 builder.Services.AddTransient<IEmailSenderService, SmtpEmailSenderService>();
+
+// File Upload Service Registration
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 var app = builder.Build();
 

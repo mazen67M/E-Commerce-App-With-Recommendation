@@ -12,5 +12,7 @@ namespace Ecommerce.Application.Services.Interfaces
         Task<bool> ConfirmEmailAsync(string userId, string token);
         Task<ApplicationUser?> GetUserByEmailAsync(string email);
         Task<string> GenerateEmailConfirmationTokenAsync(string userId);
+        Task<string> GeneratePasswordResetTokenAsync(string email);
+        Task ResetPasswordAsync(string email, string token, string newPassword);
     }
 }

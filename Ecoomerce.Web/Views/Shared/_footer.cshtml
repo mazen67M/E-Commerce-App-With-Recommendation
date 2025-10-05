@@ -1,0 +1,150 @@
+<footer class="bg-dark text-white mt-5">
+    <div class="container py-5">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase mb-3">
+                    <i class="bi bi-shop me-2"></i>ECommerce App
+                </h5>
+                <p class="text-white-50">
+                    Your trusted online shopping destination. Quality products, great prices, and excellent customer service.
+                </p>
+                <div class="social-links mt-3">
+                    <a href="#" class="text-white me-3" title="Facebook">
+                        <i class="bi bi-facebook" style="font-size: 1.5rem;"></i>
+                    </a>
+                    <a href="#" class="text-white me-3" title="Twitter">
+                        <i class="bi bi-twitter" style="font-size: 1.5rem;"></i>
+                    </a>
+                    <a href="#" class="text-white me-3" title="Instagram">
+                        <i class="bi bi-instagram" style="font-size: 1.5rem;"></i>
+                    </a>
+                    <a href="#" class="text-white" title="LinkedIn">
+                        <i class="bi bi-linkedin" style="font-size: 1.5rem;"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase mb-3">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a asp-controller="Product" asp-action="Index" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>Products
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a asp-controller="Home" asp-action="About" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>About Us
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a asp-controller="Home" asp-action="Contact" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase mb-3">Customer Service</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a asp-area="Profile" asp-controller="OrderHistory" asp-action="Index" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>My Orders
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a asp-area="Profile" asp-controller="Wishlist" asp-action="Index" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>Wishlist
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a asp-controller="Home" asp-action="Shipping" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>Shipping Info
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a asp-controller="Home" asp-action="Returns" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right me-1"></i>Returns
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="text-uppercase mb-3">Contact Us</h5>
+                <ul class="list-unstyled text-white-50">
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt-fill me-2"></i>
+                        123 Main Street, City, Country
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-telephone-fill me-2"></i>
+                        +20 1276 6324 22
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-envelope-fill me-2"></i>
+                        support@ecommerce.com
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-clock-fill me-2"></i>
+                        Mon - Fri: 9:00 AM - 6:00 PM
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="bg-white-50 my-4">
+
+        <!-- Bottom Footer -->
+        <div class="row">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                <p class="mb-0 text-white-50">
+                    &copy; @DateTime.Now.Year ECommerce App. All rights reserved.
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <a asp-controller="Home" asp-action="Privacy" class="text-white-50 text-decoration-none me-3">
+                    Privacy Policy
+                </a>
+                <a asp-controller="Home" asp-action="Terms" class="text-white-50 text-decoration-none me-3">
+                    Terms of Service
+                </a>
+                <a href="#" class="text-white-50 text-decoration-none">
+                    Sitemap
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    footer a:hover {
+        color: #fff !important;
+        transition: color 0.3s ease;
+    }
+    
+    .social-links a:hover {
+        transform: translateY(-3px);
+        transition: transform 0.3s ease;
+    }
+    
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    
+    main {
+        flex: 1;
+    }
+</style>

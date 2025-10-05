@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +15,7 @@ namespace Ecommerce.Application.DTOs.User
         public string PhoneNumber { get; set; }
         public string AddressLine1 { get; set; }
         public string Country { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsAdmin { get; set; } // Derived from roles
     }

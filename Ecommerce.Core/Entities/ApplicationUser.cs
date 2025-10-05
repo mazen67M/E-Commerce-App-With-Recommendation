@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ecommerce.Core.Entities
@@ -16,6 +16,9 @@ namespace Ecommerce.Core.Entities
 
         [MaxLength(100)]
         public string? Country { get; set; }
+
+        [MaxLength(500)]
+        public string? ImageUrl { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

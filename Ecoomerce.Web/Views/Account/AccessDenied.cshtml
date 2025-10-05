@@ -1,0 +1,61 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-danger bg-gradient text-white text-center rounded-top-4 py-4">
+                    <i class="bi bi-shield-exclamation display-1"></i>
+                    <h2 class="mt-3 mb-0">Access Denied</h2>
+                </div>
+                <div class="card-body px-4 py-5 text-center">
+                    <h4 class="text-danger mb-4">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        You don't have permission to access this resource
+                    </h4>
+                    <p class="text-muted mb-4">
+                        The page or resource you are trying to access requires special permissions that your account does not have.
+                    </p>
+                    
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>What can you do?</strong>
+                        <ul class="list-unstyled mt-2 mb-0">
+                            <li>• Contact your administrator if you believe you should have access</li>
+                            <li>• Return to the home page and try a different action</li>
+                            <li>• Check if you're logged in with the correct account</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg">
+                            <i class="bi bi-house-door me-2"></i> Go to Home
+                        </a>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer bg-light text-center rounded-bottom-4 py-3">
+                    <small class="text-muted">
+                        <i class="bi bi-question-circle me-1"></i>
+                        If you continue to experience issues, please contact support
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

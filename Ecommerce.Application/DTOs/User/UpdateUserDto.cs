@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.DTOs.User
+namespace Ecommerce.Application.DTOs.User
 {
     public class UpdateUserDto
     {
@@ -9,5 +9,6 @@
         public string? PhoneNumber { get; set; }
         public string? AddressLine1 { get; set; }
         public string? Country { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

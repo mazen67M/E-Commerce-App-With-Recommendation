@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Ecommerce.Application.ViewModels.User___Account
 {
@@ -10,6 +10,7 @@ namespace Ecommerce.Application.ViewModels.User___Account
         public string? PhoneNumber { get; set; } // Optional
         public string? AddressLine1 { get; set; } // Optional
         public string? Country { get; set; } // Optional
+        public string? ImageUrl { get; set; } // Profile picture
         public DateTime CreatedAt { get; set; }
         public int OrderCount { get; set; }
         public decimal TotalSpent { get; set; }

@@ -94,5 +94,32 @@ namespace Ecommerce.Application.Services.Implementations
             }
             return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
+
+
+        public async Task<string> GeneratePasswordResetTokenAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new ArgumentException("User not found", nameof(email));
+            }
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+
+        public async Task ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new ArgumentException("User not found", nameof(email));
+            }
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException("Password reset failed");
+            }
+        }
+
     }
 }
