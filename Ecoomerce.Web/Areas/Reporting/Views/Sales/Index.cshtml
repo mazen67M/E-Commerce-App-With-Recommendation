@@ -7,70 +7,108 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2>Sales Report</h2>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div>
+                    <h1 class="h4 mb-0">Sales Report</h1>
+                    <p class="text-muted mb-0">Comprehensive sales analytics and revenue tracking</p>
+                </div>
+            </div>
             
             @if (TempData["Error"] != null)
             {
-                <div class="alert alert-danger">@TempData["Error"]</div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             }
             
             @if (summary != null)
             {
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="card text-center">
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title">Total Revenue</h5>
-                                <h3 class="text-success">@summary.TotalRevenue.ToString("C")</h3>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-muted small">Total Revenue</div>
+                                        <div class="fs-4 fw-semibold text-success">@summary.TotalRevenue.ToString("C")</div>
+                                    </div>
+                                    <i class="bi bi-cash-stack fs-2 text-success"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card text-center">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title">Total Orders</h5>
-                                <h3 class="text-primary">@summary.TotalOrders</h3>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-muted small">Total Orders</div>
+                                        <div class="fs-4 fw-semibold text-primary">@summary.TotalOrders</div>
+                                    </div>
+                                    <i class="bi bi-bag-check fs-2 text-primary"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card text-center">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title">Average Order Value</h5>
-                                <h3 class="text-info">@summary.AverageOrderValue.ToString("C")</h3>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-muted small">Avg Order Value</div>
+                                        <div class="fs-4 fw-semibold text-info">@summary.AverageOrderValue.ToString("C")</div>
+                                    </div>
+                                    <i class="bi bi-calculator fs-2 text-info"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card text-center">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title">Top Product Sales</h5>
-                                <h3 class="text-warning">@(summary.TopSellingProducts.FirstOrDefault()?.QuantitySold ?? 0)</h3>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-muted small">Top Product Sales</div>
+                                        <div class="fs-4 fw-semibold text-warning">@(summary.TopSellingProducts.FirstOrDefault()?.QuantitySold ?? 0)</div>
+                                    </div>
+                                    <i class="bi bi-trophy fs-2 text-warning"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             }
             
-            <div class="row mb-3">
-                <div class="col-md-8">
-                    <form method="get" class="d-flex">
-                        <input type="date" name="startDate" class="form-control me-2" 
-                               value="@ViewBag.StartDate" placeholder="Start Date">
-                        <input type="date" name="endDate" class="form-control me-2" 
-                               value="@ViewBag.EndDate" placeholder="End Date">
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                    </form>
-                </div>
-                <div class="col-md-4 text-end">
-                    <a href="@Url.Action("DailySales")" class="btn btn-info">Daily Sales</a>
-                    <a href="@Url.Action("TopProducts")" class="btn btn-warning">Top Products</a>
-                    <a href="@Url.Action("Revenue")" class="btn btn-success">Revenue</a>
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-12 col-md-7">
+                            <form method="get" class="d-flex gap-2">
+                                <input type="date" name="startDate" class="form-control" 
+                                       value="@ViewBag.StartDate" placeholder="Start Date">
+                                <input type="date" name="endDate" class="form-control" 
+                                       value="@ViewBag.EndDate" placeholder="End Date">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-funnel"></i> Filter
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-5 text-md-end">
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("DailySales")" class="btn btn-sm btn-outline-secondary">Daily Sales</a>
+                                <a href="@Url.Action("TopProducts")" class="btn btn-sm btn-outline-secondary">Top Products</a>
+                                <a href="@Url.Action("Revenue")" class="btn btn-sm btn-outline-secondary">Revenue</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="table-responsive">
-                <table class="table table-striped">
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
                             <th>Order ID</th>
@@ -103,14 +141,16 @@
                         }
                     </tbody>
                 </table>
+                
+                @if (!Model.Any())
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <p class="text-muted mt-2">No sales data available for the selected period.</p>
+                    </div>
+                }
             </div>
-            
-            @if (!Model.Any())
-            {
-                <div class="text-center py-4">
-                    <p class="text-muted">No sales data available for the selected period.</p>
-                </div>
-            }
+        </div>
         </div>
     </div>
 </div>

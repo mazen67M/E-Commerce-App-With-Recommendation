@@ -1,5 +1,9 @@
-﻿@{
+@{
     Layout = "/Views/Shared/_Layout.cshtml"; // Inherits the main site layout
+}
+
+@section Styles {
+    @await RenderSectionAsync("Styles", required: false)
 }
 
 <div class="row">

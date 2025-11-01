@@ -1,0 +1,358 @@
+@model List<Ecommerce.Application.DTOs.Products.CategoryDto>
+@{
+    ViewData["Title"] = "Category Management";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-primary">
+                        <i class="bi bi-tags"></i> Category Management
+                    </h1>
+                    <p class="text-muted">Manage product categories and subcategories</p>
+                </div>
+                <div>
+                    <a asp-action="Create" class="btn btn-success btn-lg">
+                        <i class="bi bi-plus-circle"></i> Add New Category
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Tree -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Categories (@(Model.Sum(c => 1 + c.SubCategories.Count)))</h5>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary btn-sm active" id="treeViewBtn">
+                                <i class="bi bi-diagram-3"></i> Tree View
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="listViewBtn">
+                                <i class="bi bi-list-ul"></i> List View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <!-- Tree View -->
+                        <div id="treeView">
+                            @foreach (var category in Model)
+                            {
+                                <div class="category-tree-item mb-3">
+                                    <!-- Parent Category -->
+                                    <div class="d-flex align-items-center justify-content-between p-3 border rounded bg-light">
+                                        <div class="d-flex align-items-center">
+                                            @if (category.SubCategories.Any())
+                                            {
+                                                <button class="btn btn-sm btn-outline-secondary me-2 toggle-subcategories" 
+                                                        data-category-id="@category.CategoryID">
+                                                    <i class="bi bi-chevron-down"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span class="me-4"></span>
+                                            }
+                                            <div>
+                                                <h6 class="mb-0 fw-bold">@category.Name</h6>
+                                                <small class="text-muted">
+                                                    @category.SubCategories.Count subcategories
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@category.CategoryID" 
+                                               class="btn btn-outline-primary btn-sm" title="View Details">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@category.CategoryID" 
+                                               class="btn btn-outline-warning btn-sm" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-success btn-sm" 
+                                                    onclick="createSubcategory(@category.CategoryID, '@category.Name')" title="Add Subcategory">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                    onclick="confirmDelete(@category.CategoryID, '@category.Name')" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Subcategories -->
+                                    @if (category.SubCategories.Any())
+                                    {
+                                        <div class="subcategories ms-4 mt-2" id="subcategories-@category.CategoryID">
+                                            @foreach (var subcategory in category.SubCategories)
+                                            {
+                                                <div class="d-flex align-items-center justify-content-between p-2 border rounded mb-2 bg-white">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-arrow-return-right text-muted me-2"></i>
+                                                        <div>
+                                                            <span class="fw-medium">@subcategory.Name</span>
+                                                            <small class="text-muted ms-2">Subcategory</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="btn-group" role="group">
+                                                        <a asp-action="Details" asp-route-id="@subcategory.CategoryID" 
+                                                           class="btn btn-outline-primary btn-sm" title="View Details">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a asp-action="Edit" asp-route-id="@subcategory.CategoryID" 
+                                                           class="btn btn-outline-warning btn-sm" title="Edit">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                                onclick="confirmDelete(@subcategory.CategoryID, '@subcategory.Name')" title="Delete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <!-- List View (Hidden by default) -->
+                        <div id="listView" style="display: none;">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Category Name</th>
+                                            <th>Parent Category</th>
+                                            <th>Type</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var category in Model)
+                                        {
+                                            <tr>
+                                                <td class="fw-bold">@category.Name</td>
+                                                <td><span class="text-muted">-</span></td>
+                                                <td><span class="badge bg-primary">Parent</span></td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a asp-action="Details" asp-route-id="@category.CategoryID" 
+                                                           class="btn btn-outline-primary btn-sm">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a asp-action="Edit" asp-route-id="@category.CategoryID" 
+                                                           class="btn btn-outline-warning btn-sm">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                                onclick="confirmDelete(@category.CategoryID, '@category.Name')">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @foreach (var subcategory in category.SubCategories)
+                                            {
+                                                <tr>
+                                                    <td class="ps-4">
+                                                        <i class="bi bi-arrow-return-right text-muted me-2"></i>
+                                                        @subcategory.Name
+                                                    </td>
+                                                    <td>@category.Name</td>
+                                                    <td><span class="badge bg-secondary">Subcategory</span></td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <a asp-action="Details" asp-route-id="@subcategory.CategoryID" 
+                                                               class="btn btn-outline-primary btn-sm">
+                                                                <i class="bi bi-eye"></i>
+                                                            </a>
+                                                            <a asp-action="Edit" asp-route-id="@subcategory.CategoryID" 
+                                                               class="btn btn-outline-warning btn-sm">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+                                                            <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                                    onclick="confirmDelete(@subcategory.CategoryID, '@subcategory.Name')">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-tags display-1 text-muted"></i>
+                            <h4 class="mt-3 text-muted">No Categories Found</h4>
+                            <p class="text-muted">Start by creating your first product category.</p>
+                            <a asp-action="Create" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Create First Category
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the category "<span id="categoryName"></span>"?</p>
+                <p class="text-danger"><strong>This action cannot be undone.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Category</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let categoryToDelete = null;
+
+        // Toggle between tree and list view
+        document.getElementById('treeViewBtn').addEventListener('click', function() {
+            document.getElementById('treeView').style.display = 'block';
+            document.getElementById('listView').style.display = 'none';
+            this.classList.add('active');
+            document.getElementById('listViewBtn').classList.remove('active');
+        });
+
+        document.getElementById('listViewBtn').addEventListener('click', function() {
+            document.getElementById('treeView').style.display = 'none';
+            document.getElementById('listView').style.display = 'block';
+            this.classList.add('active');
+            document.getElementById('treeViewBtn').classList.remove('active');
+        });
+
+        // Toggle subcategories
+        document.querySelectorAll('.toggle-subcategories').forEach(button => {
+            button.addEventListener('click', function() {
+                const categoryId = this.getAttribute('data-category-id');
+                const subcategoriesDiv = document.getElementById(`subcategories-${categoryId}`);
+                const icon = this.querySelector('i');
+                
+                if (subcategoriesDiv.style.display === 'none') {
+                    subcategoriesDiv.style.display = 'block';
+                    icon.classList.remove('bi-chevron-right');
+                    icon.classList.add('bi-chevron-down');
+                } else {
+                    subcategoriesDiv.style.display = 'none';
+                    icon.classList.remove('bi-chevron-down');
+                    icon.classList.add('bi-chevron-right');
+                }
+            });
+        });
+
+        function confirmDelete(categoryId, categoryName) {
+            categoryToDelete = categoryId;
+            document.getElementById('categoryName').textContent = categoryName;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (categoryToDelete) {
+                $.ajax({
+                    url: '@Url.Action("Delete", "CategoryManagement", new { area = "Admin" })',
+                    type: 'POST',
+                    data: { 
+                        id: categoryToDelete,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                        
+                        if (response.success) {
+                            showNotification(response.message, 'success');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1500);
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                        showNotification('Failed to delete category', 'error');
+                    }
+                });
+            }
+        });
+
+        function createSubcategory(parentId, parentName) {
+            window.location.href = `@Url.Action("Create", "CategoryManagement", new { area = "Admin" })?parentId=${parentId}`;
+        }
+
+        function showNotification(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            const notification = $(`
+                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                     style="top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 3000);
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .category-tree-item {
+            border-left: 3px solid #0d6efd;
+            padding-left: 10px;
+        }
+        
+        .subcategories {
+            border-left: 2px solid #dee2e6;
+        }
+        
+        .toggle-subcategories {
+            transition: transform 0.2s ease;
+        }
+        
+        .btn-group .btn {
+            border-radius: 0.375rem;
+        }
+        
+        .btn-group .btn:not(:last-child) {
+            margin-right: 0.25rem;
+        }
+        
+        .table th {
+            border-top: none;
+            font-weight: 600;
+        }
+    </style>
+}

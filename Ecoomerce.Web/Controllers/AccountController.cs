@@ -132,7 +132,7 @@ namespace Ecoomerce.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Porfile()
+        public async Task<IActionResult> Profile()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userDto = await _userService.GetUserProfileAsync(userId!);

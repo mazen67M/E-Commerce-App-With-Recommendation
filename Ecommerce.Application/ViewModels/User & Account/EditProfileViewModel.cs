@@ -27,5 +27,12 @@ namespace Ecommerce.Application.ViewModels.Admin_Panel
         // For displaying all available roles
         public List<string> Roles { get; set; } = new();
 
+        [MaxLength(15)]
+        public string? PhoneNumber { get; set; }
+
+        [MaxLength(100)]
+        public string? AddressLine1 { get; set; }
+        public string? Country { get; set; }
+
     }
 }

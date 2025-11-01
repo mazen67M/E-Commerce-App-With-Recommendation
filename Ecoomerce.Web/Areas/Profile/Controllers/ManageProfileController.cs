@@ -14,6 +14,7 @@ namespace Ecommerce.Web.Areas.Profile.Controllers
 {
     [Area("Profile")]
     [Authorize]
+    [Route("Profile/[controller]")]
     public class ManageProfileController : Controller
     {
         private readonly IUserService _userService;
@@ -28,6 +29,8 @@ namespace Ecommerce.Web.Areas.Profile.Controllers
         }
 
         [HttpGet]
+        [Route("")]
+        [Route("Index")]
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -39,6 +42,8 @@ namespace Ecommerce.Web.Areas.Profile.Controllers
         }
 
         [HttpPost]
+        [Route("")]
+        [Route("Index")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(EditProfileViewModel model)
         {
@@ -58,6 +63,7 @@ namespace Ecommerce.Web.Areas.Profile.Controllers
         }
 
         [HttpPost]
+        [Route("UploadProfilePicture")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
         {

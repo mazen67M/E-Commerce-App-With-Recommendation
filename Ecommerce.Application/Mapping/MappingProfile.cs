@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Ecommerce.Application.DTOs;
 using Ecommerce.Application.DTOs.Auth;
 using Ecommerce.Application.DTOs.Cart;
@@ -13,6 +13,8 @@ using Ecommerce.Application.DTOs.User;
 using Ecommerce.Application.DTOs.Wishlist;
 using Ecommerce.Application.ViewModels; // For RegisterViewModel
 using Ecommerce.Application.ViewModels.Forms___Input_Models;
+using Ecommerce.Application.ViewModels.Admin_Panel;
+using Ecommerce.Application.ViewModels.User___Account;
 using Ecommerce.Core.Entities;
 using System.Linq;
 
@@ -30,9 +32,32 @@ namespace Ecommerce.Application.Mapping
                 .ForMember(dest => dest.ReviewCount, opt => opt.MapFrom(src => src.Reviews != null ? src.Reviews.Count : 0))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.ProductTags != null ? src.ProductTags.Select(pt => pt.Tag.Name) : new List<string>()));
 
-            CreateMap<Category, CategoryDto>();
+            CreateMap<Category, CategoryDto>()
+                .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategory != null ? src.ParentCategory.Name : null))
+                .ForMember(dest => dest.SubCategories, opt => opt.Ignore()); // Handled separately in controller
+            
+            CreateMap<CategoryDto, Category>()
+                .ForMember(dest => dest.ParentCategory, opt => opt.Ignore())
+                .ForMember(dest => dest.SubCategories, opt => opt.Ignore())
+                .ForMember(dest => dest.Products, opt => opt.Ignore());
             CreateMap<Brand, BrandDto>();
+            CreateMap<BrandDto, Brand>()
+                .ForMember(dest => dest.Products, opt => opt.Ignore());
             CreateMap<Tag, TagDto>();
+
+            // --- Admin Panel ViewModel Mappings ---
+            CreateMap<EditProductViewModel, Product>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore())
+                .ForMember(dest => dest.Brand, opt => opt.Ignore())
+                .ForMember(dest => dest.Reviews, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductTags, opt => opt.Ignore())
+                .ForMember(dest => dest.CartItems, opt => opt.Ignore())
+                .ForMember(dest => dest.OrderItems, opt => opt.Ignore())
+                .ForMember(dest => dest.InventoryLogs, opt => opt.Ignore());
+
+            CreateMap<Product, EditProductViewModel>();
 
             // --- Cart Mappings ---
             CreateMap<Cart, CartDto>();
@@ -49,9 +74,11 @@ namespace Ecommerce.Application.Mapping
             CreateMap<Shipping, ShippingDto>();
 
             // --- User & Auth Mappings ---
-            CreateMap<ApplicationUser, UserDto>();
-            // ➕ ADDED: Mapping for profile updates. .ReverseMap() creates the mapping from User -> UpdateUserDto as well.
-            CreateMap<UpdateUserDto, ApplicationUser>().ReverseMap();
+            CreateMap<ApplicationUser, UserDto>();            CreateMap<UpdateUserDto, ApplicationUser>().ReverseMap();
+            CreateMap<UserDto, EditProfileViewModel>().ReverseMap();
+            CreateMap<EditProfileViewModel, UpdateUserDto>();
+            CreateMap<ApplicationUser, ProfileViewModel>();
+            CreateMap<UserDto, ProfileViewModel>();
 
             // --- Review Mappings ---
             CreateMap<Review, ReviewDto>()

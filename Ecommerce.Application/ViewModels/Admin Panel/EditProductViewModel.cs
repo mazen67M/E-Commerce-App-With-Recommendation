@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering; // Required for SelectListItem
+using Microsoft.AspNetCore.Mvc.Rendering; // Required for SelectListItem
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -20,6 +20,7 @@ namespace Ecommerce.Application.ViewModels.Admin_Panel
         public string? ImageURL { get; set; } 
 
         [Display(Name = "Category")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a category")]
         public int CategoryID { get; set; }
 
         [Display(Name = "Brand")]

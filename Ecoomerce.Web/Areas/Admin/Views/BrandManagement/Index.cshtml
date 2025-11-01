@@ -1,0 +1,333 @@
+@model List<Ecommerce.Application.DTOs.Products.BrandDto>
+@{
+    ViewData["Title"] = "Brand Management";
+    var searchTerm = ViewBag.SearchTerm as string;
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-primary">
+                        <i class="bi bi-building"></i> Brand Management
+                    </h1>
+                    <p class="text-muted">Manage product brands and manufacturers</p>
+                </div>
+                <div>
+                    <a asp-action="Create" class="btn btn-success btn-lg">
+                        <i class="bi bi-plus-circle"></i> Add New Brand
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-8">
+                            <label for="searchTerm" class="form-label">Search Brands</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
+                                       value="@searchTerm" placeholder="Search by brand name...">
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-funnel"></i> Search
+                            </button>
+                            @if (!string.IsNullOrEmpty(searchTerm))
+                            {
+                                <a asp-action="Index" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle"></i> Clear
+                                </a>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brands Grid -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            Brands (@Model.Count)
+                            @if (!string.IsNullOrEmpty(searchTerm))
+                            {
+                                <small class="text-muted">- filtered by "@searchTerm"</small>
+                            }
+                        </h5>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary btn-sm active" id="gridViewBtn">
+                                <i class="bi bi-grid-3x3-gap"></i> Grid View
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="listViewBtn">
+                                <i class="bi bi-list-ul"></i> List View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <!-- Grid View -->
+                        <div id="gridView">
+                            <div class="row">
+                                @foreach (var brand in Model)
+                                {
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                        <div class="card h-100 shadow-sm brand-card">
+                                            <div class="card-body text-center">
+                                                <div class="mb-3">
+                                                    <div class="brand-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                                         style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                                        @brand.Name.Substring(0, Math.Min(2, brand.Name.Length)).ToUpper()
+                                                    </div>
+                                                </div>
+                                                <h6 class="card-title fw-bold">@brand.Name</h6>
+                                                <p class="card-text text-muted small">Brand ID: @brand.BrandID</p>
+                                                
+                                                <div class="d-grid gap-2">
+                                                    <div class="btn-group" role="group">
+                                                        <a asp-action="Details" asp-route-id="@brand.BrandID" 
+                                                           class="btn btn-outline-primary btn-sm" title="View Details">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a asp-action="Edit" asp-route-id="@brand.BrandID" 
+                                                           class="btn btn-outline-warning btn-sm" title="Edit">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                                onclick="confirmDelete(@brand.BrandID, '@brand.Name')" title="Delete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- List View (Hidden by default) -->
+                        <div id="listView" style="display: none;">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Brand ID</th>
+                                            <th>Brand Name</th>
+                                            <th>Products Count</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var brand in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span class="badge bg-light text-dark">#@brand.BrandID</span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="brand-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" 
+                                                             style="width: 40px; height: 40px; font-size: 0.875rem;">
+                                                            @brand.Name.Substring(0, Math.Min(2, brand.Name.Length)).ToUpper()
+                                                        </div>
+                                                        <strong>@brand.Name</strong>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="text-muted">0 products</span>
+                                                    <!-- TODO: Add actual product count -->
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a asp-action="Details" asp-route-id="@brand.BrandID" 
+                                                           class="btn btn-outline-primary btn-sm" title="View Details">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a asp-action="Edit" asp-route-id="@brand.BrandID" 
+                                                           class="btn btn-outline-warning btn-sm" title="Edit">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                                onclick="confirmDelete(@brand.BrandID, '@brand.Name')" title="Delete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            @if (!string.IsNullOrEmpty(searchTerm))
+                            {
+                                <i class="bi bi-search display-1 text-muted"></i>
+                                <h4 class="mt-3 text-muted">No Brands Found</h4>
+                                <p class="text-muted">No brands match your search criteria "@searchTerm".</p>
+                                <a asp-action="Index" class="btn btn-outline-primary me-2">
+                                    <i class="bi bi-arrow-left"></i> View All Brands
+                                </a>
+                                <a asp-action="Create" class="btn btn-success">
+                                    <i class="bi bi-plus-circle"></i> Add New Brand
+                                </a>
+                            }
+                            else
+                            {
+                                <i class="bi bi-building display-1 text-muted"></i>
+                                <h4 class="mt-3 text-muted">No Brands Found</h4>
+                                <p class="text-muted">Start by creating your first brand.</p>
+                                <a asp-action="Create" class="btn btn-success">
+                                    <i class="bi bi-plus-circle"></i> Create First Brand
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the brand "<span id="brandName"></span>"?</p>
+                <p class="text-danger"><strong>This action cannot be undone.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Brand</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let brandToDelete = null;
+
+        // Toggle between grid and list view
+        document.getElementById('gridViewBtn').addEventListener('click', function() {
+            document.getElementById('gridView').style.display = 'block';
+            document.getElementById('listView').style.display = 'none';
+            this.classList.add('active');
+            document.getElementById('listViewBtn').classList.remove('active');
+        });
+
+        document.getElementById('listViewBtn').addEventListener('click', function() {
+            document.getElementById('gridView').style.display = 'none';
+            document.getElementById('listView').style.display = 'block';
+            this.classList.add('active');
+            document.getElementById('gridViewBtn').classList.remove('active');
+        });
+
+        function confirmDelete(brandId, brandName) {
+            brandToDelete = brandId;
+            document.getElementById('brandName').textContent = brandName;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (brandToDelete) {
+                $.ajax({
+                    url: '@Url.Action("Delete", "BrandManagement", new { area = "Admin" })',
+                    type: 'POST',
+                    data: { 
+                        id: brandToDelete,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                        
+                        if (response.success) {
+                            showNotification(response.message, 'success');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1500);
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                        showNotification('Failed to delete brand', 'error');
+                    }
+                });
+            }
+        });
+
+        function showNotification(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            const notification = $(`
+                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                     style="top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 3000);
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .brand-card {
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .brand-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        .brand-icon {
+            font-weight: bold;
+        }
+        
+        .btn-group .btn {
+            border-radius: 0.375rem;
+        }
+        
+        .btn-group .btn:not(:last-child) {
+            margin-right: 0.25rem;
+        }
+        
+        .table th {
+            border-top: none;
+            font-weight: 600;
+        }
+    </style>
+}

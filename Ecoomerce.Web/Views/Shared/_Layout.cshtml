@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Ecoomerce.Web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -22,8 +24,74 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="productsDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Products
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index">
+                                        <i class="bi bi-grid"></i> All Products
+                                    </a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Featured">
+                                        <i class="bi bi-star-fill text-warning"></i> Featured
+                                    </a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product"
+                                        asp-action="TopSelling">
+                                        <i class="bi bi-fire text-danger"></i> Top Selling
+                                    </a></li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order"
+                                asp-action="Index">Orders</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="reportsDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Reports
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+                                <li><a class="dropdown-item" asp-area="Reporting" asp-controller="Sales"
+                                        asp-action="Index">
+                                        <i class="bi bi-graph-up"></i> Sales
+                                    </a></li>
+                                <li><a class="dropdown-item" asp-area="Reporting" asp-controller="Inventory"
+                                        asp-action="Index">
+                                        <i class="bi bi-box"></i> Inventory
+                                    </a></li>
+                                <li><a class="dropdown-item" asp-area="Reporting" asp-controller="User"
+                                        asp-action="Index">
+                                        <i class="bi bi-people"></i> Customers
+                                    </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="accountDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Account
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                <li><a class="dropdown-item" asp-area="Profile" asp-controller="ManageProfile"
+                                        asp-action="Index">
+                                        <i class="bi bi-gear"></i> Settings
+                                    </a></li>
+                                <li><a class="dropdown-item" asp-area="Profile" asp-controller="OrderHistory"
+                                        asp-action="Index">
+                                        <i class="bi bi-receipt"></i> Order History
+                                    </a></li>
+                                <li><a class="dropdown-item" asp-area="Profile" asp-controller="Wishlist"
+                                        asp-action="Index">
+                                        <i class="bi bi-heart"></i> Wishlist
+                                    </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                asp-action="Privacy">Help</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -31,7 +99,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container my-3">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

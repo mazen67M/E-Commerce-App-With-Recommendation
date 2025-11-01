@@ -1,0 +1,462 @@
+@model Ecommerce.Application.ViewModels.ProductDetailsViewModel
+@{
+    ViewData["Title"] = Model.Product.Name;
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Product" asp-action="Index">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
+        </ol>
+    </nav>
+
+    <!-- Product Details -->
+    <div class="row mb-5">
+        <!-- Product Image -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="position-relative">
+                    @if (!string.IsNullOrEmpty(Model.Product.ImageURL))
+                    {
+                        <img src="@Model.Product.ImageURL" class="card-img-top" alt="@Model.Product.Name" 
+                             style="height: 500px; object-fit: cover;" id="productImage">
+                    }
+                    else
+                    {
+                        <div class="card-img-top d-flex align-items-center justify-content-center bg-light" 
+                             style="height: 500px;">
+                            <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+                        </div>
+                    }
+                    
+                    @if (!Model.Product.IsAvailable)
+                    {
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-danger fs-6">Out of Stock</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Information -->
+        <div class="col-lg-6">
+            <div class="h-100">
+                <!-- Product Name -->
+                <h1 class="display-5 fw-bold text-primary mb-3">@Model.Product.Name</h1>
+
+                <!-- Category and Brand -->
+                <div class="mb-3">
+                    <span class="badge bg-secondary me-2">
+                        <i class="bi bi-tag"></i> @Model.Product.CategoryName
+                    </span>
+                    @if (!string.IsNullOrEmpty(Model.Product.BrandName))
+                    {
+                        <span class="badge bg-info">
+                            <i class="bi bi-building"></i> @Model.Product.BrandName
+                        </span>
+                    }
+                </div>
+
+                <!-- Rating -->
+                @if (Model.Product.AverageRating > 0)
+                {
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                @if (i <= Model.Product.AverageRating)
+                                {
+                                    <i class="bi bi-star-fill text-warning fs-5"></i>
+                                }
+                                else if (i - 0.5 <= Model.Product.AverageRating)
+                                {
+                                    <i class="bi bi-star-half text-warning fs-5"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star text-muted fs-5"></i>
+                                }
+                            }
+                            <span class="ms-2 text-muted">
+                                (@Model.Product.AverageRating.ToString("F1")) 
+                                @if (Model.Product.ReviewCount > 0)
+                                {
+                                    <span>• @Model.Product.ReviewCount review@(Model.Product.ReviewCount != 1 ? "s" : "")</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+                }
+
+                <!-- Price -->
+                <div class="mb-4">
+                    <h2 class="text-success fw-bold">@Model.Product.Price.ToString("C")</h2>
+                </div>
+
+                <!-- Description -->
+                @if (!string.IsNullOrEmpty(Model.Product.Description))
+                {
+                    <div class="mb-4">
+                        <h5 class="fw-bold">Description</h5>
+                        <p class="text-muted">@Model.Product.Description</p>
+                    </div>
+                }
+
+                <!-- Availability Status -->
+                <div class="mb-4">
+                    <h6 class="fw-bold">Availability</h6>
+                    @if (Model.Product.IsAvailable)
+                    {
+                        <span class="badge bg-success fs-6">
+                            <i class="bi bi-check-circle"></i> In Stock
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger fs-6">
+                            <i class="bi bi-x-circle"></i> Out of Stock
+                        </span>
+                    }
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2 d-md-block">
+                    @if (Model.Product.IsAvailable)
+                    {
+                        <button type="button" class="btn btn-primary btn-lg me-2" onclick="addToCart(@Model.Product.ProductID)">
+                            <i class="bi bi-cart-plus"></i> Add to Cart
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-lg me-2" onclick="buyNow(@Model.Product.ProductID)">
+                            <i class="bi bi-lightning"></i> Buy Now
+                        </button>
+                    }
+                    
+                    <button type="button" class="btn btn-outline-danger btn-lg" onclick="toggleWishlist(@Model.Product.ProductID)">
+                        <i class="bi @(Model.IsInWishlist ? "bi-heart-fill" : "bi-heart")"></i> 
+                        @(Model.IsInWishlist ? "Remove from Wishlist" : "Add to Wishlist")
+                    </button>
+                </div>
+
+                <!-- Share Buttons -->
+                <div class="mt-4">
+                    <h6 class="fw-bold">Share this product</h6>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="shareProduct('facebook')">
+                            <i class="bi bi-facebook"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-info btn-sm" onclick="shareProduct('twitter')">
+                            <i class="bi bi-twitter"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-success btn-sm" onclick="shareProduct('whatsapp')">
+                            <i class="bi bi-whatsapp"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="copyLink()">
+                            <i class="bi bi-link-45deg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Tags -->
+    @if (Model.Product.Tags != null && Model.Product.Tags.Any())
+    {
+        <div class="row mb-5">
+            <div class="col-12">
+                <h5 class="fw-bold mb-3">Tags</h5>
+                <div>
+                    @foreach (var tag in Model.Product.Tags)
+                    {
+                        <span class="badge bg-light text-dark me-2 mb-2">#@tag</span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Recommended Products -->
+    @if (Model.RecommendedProducts.Any())
+    {
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold">You might also like</h3>
+                    <a asp-action="Index" class="btn btn-outline-primary">View All Products</a>
+                </div>
+                
+                <div class="row">
+                    @foreach (var product in Model.RecommendedProducts)
+                    {
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm product-card">
+                                <!-- Product Image -->
+                                <div class="position-relative">
+                                    @if (!string.IsNullOrEmpty(product.ImageURL))
+                                    {
+                                        <img src="@product.ImageURL" class="card-img-top product-image" alt="@product.Name" 
+                                             style="height: 200px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <div class="card-img-top d-flex align-items-center justify-content-center bg-light" 
+                                             style="height: 200px;">
+                                            <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                        </div>
+                                    }
+                                    
+                                    @if (!product.IsAvailable)
+                                    {
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Product Info -->
+                                <div class="card-body d-flex flex-column">
+                                    <h6 class="card-title text-truncate" title="@product.Name">@product.Name</h6>
+                                    
+                                    <!-- Rating -->
+                                    @if (product.AverageRating > 0)
+                                    {
+                                        <div class="mb-2">
+                                            <div class="d-flex align-items-center">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    @if (i <= product.AverageRating)
+                                                    {
+                                                        <i class="bi bi-star-fill text-warning small"></i>
+                                                    }
+                                                    else if (i - 0.5 <= product.AverageRating)
+                                                    {
+                                                        <i class="bi bi-star-half text-warning small"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="bi bi-star text-muted small"></i>
+                                                    }
+                                                }
+                                                <small class="text-muted ms-1">(@product.AverageRating.ToString("F1"))</small>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <!-- Price and Actions -->
+                                    <div class="mt-auto">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="text-primary mb-0">@product.Price.ToString("C")</h6>
+                                            <a asp-action="Details" asp-route-id="@product.ProductID" 
+                                               class="btn btn-outline-primary btn-sm">
+                                                View
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Reviews Section Placeholder -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Customer Reviews</h5>
+                </div>
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-chat-square-text display-4 text-muted"></i>
+                    <h6 class="mt-3 text-muted">Reviews feature coming soon!</h6>
+                    <p class="text-muted">We're working on implementing customer reviews for this product.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function addToCart(productId) {
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Product")',
+                type: 'POST',
+                data: { productId: productId, quantity: 1 },
+                success: function(response) {
+                    if (response.success) {
+                        showNotification(response.message, 'success');
+                    } else {
+                        if (response.message.includes('authenticated')) {
+                            showNotification('Please login to add items to cart', 'warning');
+                            setTimeout(function() {
+                                window.location.href = '@Url.Action("Login", "Account")';
+                            }, 1500);
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    }
+                },
+                error: function() {
+                    showNotification('Failed to add product to cart', 'error');
+                }
+            });
+        }
+
+        function buyNow(productId) {
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Product")',
+                type: 'POST',
+                data: { productId: productId, quantity: 1 },
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = '@Url.Action("Index", "Cart")';
+                    } else {
+                        if (response.message.includes('authenticated')) {
+                            showNotification('Please login to continue', 'warning');
+                            setTimeout(function() {
+                                window.location.href = '@Url.Action("Login", "Account")';
+                            }, 1500);
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    }
+                },
+                error: function() {
+                    showNotification('Failed to process request', 'error');
+                }
+            });
+        }
+
+        function toggleWishlist(productId) {
+            $.ajax({
+                url: '@Url.Action("ToggleWishlist", "Product")',
+                type: 'POST',
+                data: { productId: productId },
+                success: function(response) {
+                    if (response.success) {
+                        var button = event.target.closest('button');
+                        var icon = button.querySelector('i');
+                        
+                        if (response.isInWishlist) {
+                            icon.classList.remove('bi-heart');
+                            icon.classList.add('bi-heart-fill');
+                            button.innerHTML = '<i class="bi bi-heart-fill"></i> Remove from Wishlist';
+                        } else {
+                            icon.classList.remove('bi-heart-fill');
+                            icon.classList.add('bi-heart');
+                            button.innerHTML = '<i class="bi bi-heart"></i> Add to Wishlist';
+                        }
+                        
+                        showNotification(response.message, 'success');
+                    } else {
+                        if (response.message.includes('authenticated')) {
+                            showNotification('Please login to manage wishlist', 'warning');
+                            setTimeout(function() {
+                                window.location.href = '@Url.Action("Login", "Account")';
+                            }, 1500);
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    }
+                },
+                error: function() {
+                    showNotification('Failed to update wishlist', 'error');
+                }
+            });
+        }
+
+        function shareProduct(platform) {
+            var url = window.location.href;
+            var title = '@Model.Product.Name';
+            
+            switch(platform) {
+                case 'facebook':
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                    break;
+                case 'twitter':
+                    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, '_blank');
+                    break;
+                case 'whatsapp':
+                    window.open(`https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`, '_blank');
+                    break;
+            }
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(function() {
+                showNotification('Link copied to clipboard!', 'success');
+            });
+        }
+
+        function showNotification(message, type) {
+            // Simple notification system
+            var alertClass = type === 'success' ? 'alert-success' : type === 'info' ? 'alert-info' : 'alert-warning';
+            var notification = $(`
+                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                     style="top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            
+            $('body').append(notification);
+            
+            // Auto-dismiss after 3 seconds
+            setTimeout(function() {
+                notification.alert('close');
+            }, 3000);
+        }
+
+        // Product card hover effects for recommended products
+        $(document).ready(function() {
+            $('.product-card').hover(
+                function() {
+                    $(this).addClass('shadow-lg').removeClass('shadow-sm');
+                },
+                function() {
+                    $(this).addClass('shadow-sm').removeClass('shadow-lg');
+                }
+            );
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .product-card {
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        #productImage {
+            cursor: zoom-in;
+        }
+        
+        .btn-group .btn {
+            border-radius: 0.375rem;
+        }
+        
+        .btn-group .btn:not(:last-child) {
+            margin-right: 0.25rem;
+        }
+    </style>
+}

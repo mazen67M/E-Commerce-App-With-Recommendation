@@ -1,4 +1,5 @@
-﻿using Ecommerce.Core.Entities;
+using Ecommerce.Core.Entities;
+using Ecommerce.Core.Interfaces;
 using Ecommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;

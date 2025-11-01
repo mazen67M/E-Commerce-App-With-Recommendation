@@ -1,0 +1,345 @@
+@model Ecommerce.Application.DTOs.Products.CategoryDto
+@{
+    ViewData["Title"] = "Create Category";
+    var parentCategories = ViewBag.ParentCategories as SelectList;
+    var selectedParentId = Context.Request.Query["parentId"].ToString();
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="CategoryManagement" asp-action="Index">Category Management</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Create Category</li>
+                </ol>
+            </nav>
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="bi bi-plus-circle"></i> Create New Category
+            </h1>
+            <p class="text-muted">Add a new product category to organize your products</p>
+        </div>
+    </div>
+
+    <!-- Category Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Category Information</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-area="Admin" asp-controller="CategoryManagement" asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        
+                        @if (TempData["ValidationErrors"] != null)
+                        {
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Validation Errors:</strong> @TempData["ValidationErrors"]
+                            </div>
+                        }
+
+                        <!-- Category Name -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label asp-for="Name" class="form-label">Category Name <span class="text-danger">*</span></label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter category name" id="categoryName" required>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                                <div class="form-text">Choose a clear, descriptive name for your category</div>
+                            </div>
+                        </div>
+
+                        <!-- Parent Category -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <label asp-for="ParentCategoryID" class="form-label">Parent Category</label>
+                                <select asp-for="ParentCategoryID" asp-items="ViewBag.ParentCategories" class="form-select" id="parentCategory">
+                                    <option value="">None (Root Category)</option>
+                                </select>
+                                <span asp-validation-for="ParentCategoryID" class="text-danger"></span>
+                                <div class="form-text">
+                                    Select a parent category to create a subcategory, or leave empty for a root category
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category Type Info -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <h6><i class="bi bi-info-circle"></i> Category Types</h6>
+                                    <ul class="mb-0">
+                                        <li><strong>Root Category:</strong> Main category without a parent (e.g., Electronics, Clothing)</li>
+                                        <li><strong>Subcategory:</strong> Category under a parent (e.g., Smartphones under Electronics)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between">
+                                    <a asp-action="Index" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-left"></i> Back to Categories
+                                    </a>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-primary me-2" onclick="previewCategory()">
+                                            <i class="bi bi-eye"></i> Preview
+                                        </button>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="bi bi-check-circle"></i> Create Category
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-eye"></i> Live Preview</h5>
+                </div>
+                <div class="card-body">
+                    <div id="categoryPreview">
+                        <!-- Category Preview -->
+                        <div class="mb-3">
+                            <h6 class="text-muted">Category Structure:</h6>
+                            <div class="border rounded p-3 bg-light">
+                                <div id="categoryPath">
+                                    <span class="text-muted">Category Name</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h6 class="text-muted">Category Type:</h6>
+                            <span id="categoryType" class="badge bg-primary">Root Category</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <h6 class="text-muted">URL Slug:</h6>
+                            <code id="categorySlug">/category/category-name</code>
+                        </div>
+
+                        <div class="alert alert-light">
+                            <small class="text-muted">
+                                <i class="bi bi-lightbulb"></i>
+                                This is how your category will appear in the navigation and product listings.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Card -->
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0"><i class="bi bi-lightbulb"></i> Category Best Practices</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="bi bi-check text-success"></i> Use clear, descriptive names</li>
+                        <li class="mb-2"><i class="bi bi-check text-success"></i> Keep category hierarchy simple (2-3 levels max)</li>
+                        <li class="mb-2"><i class="bi bi-check text-success"></i> Avoid duplicate category names</li>
+                        <li class="mb-2"><i class="bi bi-check text-success"></i> Think about customer navigation</li>
+                        <li class="mb-0"><i class="bi bi-check text-success"></i> Group related products logically</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Existing Categories -->
+            @if (parentCategories != null && parentCategories.Any())
+            {
+                <div class="card shadow-sm mt-3">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0"><i class="bi bi-diagram-3"></i> Existing Categories</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="small">
+                            @foreach (var category in parentCategories)
+                            {
+                                <div class="mb-1">
+                                    <i class="bi bi-tag text-muted"></i> @category.Text
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Set selected parent if coming from "Add Subcategory" link
+        @if (!string.IsNullOrEmpty(selectedParentId))
+        {
+            <text>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('parentCategory').value = '@selectedParentId';
+                updatePreview();
+            });
+            </text>
+        }
+
+        // Live preview functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('categoryName').addEventListener('input', updatePreview);
+            document.getElementById('parentCategory').addEventListener('change', updatePreview);
+            updatePreview();
+        });
+
+        function updatePreview() {
+            const categoryName = document.getElementById('categoryName').value || 'Category Name';
+            const parentSelect = document.getElementById('parentCategory');
+            const parentText = parentSelect.options[parentSelect.selectedIndex]?.text;
+            const hasParent = parentSelect.value !== '';
+
+            // Update category path
+            const categoryPath = document.getElementById('categoryPath');
+            if (hasParent && parentText !== 'None (Root Category)') {
+                categoryPath.innerHTML = `
+                    <span class="text-muted">${parentText}</span>
+                    <i class="bi bi-chevron-right mx-2"></i>
+                    <span class="fw-bold">${categoryName}</span>
+                `;
+            } else {
+                categoryPath.innerHTML = `<span class="fw-bold">${categoryName}</span>`;
+            }
+
+            // Update category type
+            const categoryType = document.getElementById('categoryType');
+            if (hasParent) {
+                categoryType.textContent = 'Subcategory';
+                categoryType.className = 'badge bg-secondary';
+            } else {
+                categoryType.textContent = 'Root Category';
+                categoryType.className = 'badge bg-primary';
+            }
+
+            // Update URL slug
+            const slug = categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            document.getElementById('categorySlug').textContent = `/category/${slug}`;
+        }
+
+        function previewCategory() {
+            const categoryName = document.getElementById('categoryName').value;
+            const parentSelect = document.getElementById('parentCategory');
+            const parentText = parentSelect.options[parentSelect.selectedIndex]?.text;
+            
+            if (!categoryName.trim()) {
+                showNotification('Please enter a category name first', 'warning');
+                return;
+            }
+
+            let message = `Category: ${categoryName}`;
+            if (parentSelect.value) {
+                message += `\nParent: ${parentText}`;
+                message += `\nType: Subcategory`;
+            } else {
+                message += `\nType: Root Category`;
+            }
+
+            alert(message);
+        }
+
+        // Form validation enhancement
+        document.querySelector('form').addEventListener('submit', function(e) {
+            console.log('Form submission started...');
+            
+            const categoryName = document.getElementById('categoryName').value.trim();
+            const parentCategorySelect = document.querySelector('select[name="ParentCategoryID"]');
+            const parentCategoryId = parentCategorySelect ? parentCategorySelect.value : '';
+
+            // Debug: Log form data
+            console.log('Form data being submitted:');
+            console.log('Name:', categoryName);
+            console.log('ParentCategoryID:', parentCategoryId);
+
+            // Log all form fields
+            const formData = new FormData(this);
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            if (!categoryName) {
+                e.preventDefault();
+                console.error('Validation failed: Category name is empty');
+                showNotification('Category name is required', 'error');
+                return;
+            }
+
+            if (categoryName.length < 2) {
+                e.preventDefault();
+                console.error('Validation failed: Category name too short');
+                showNotification('Category name must be at least 2 characters long', 'error');
+                return;
+            }
+
+            console.log('Client-side validation passed, submitting form...');
+
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Creating Category...';
+            submitBtn.disabled = true;
+        });
+
+        function showNotification(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 
+                             type === 'error' ? 'alert-danger' : 
+                             type === 'warning' ? 'alert-warning' : 'alert-info';
+            
+            const notification = $(`
+                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                     style="top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 3000);
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .form-label {
+            font-weight: 600;
+        }
+        
+        .card-header {
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .btn-group .btn {
+            border-radius: 0.375rem;
+        }
+        
+        .btn-group .btn:not(:last-child) {
+            margin-right: 0.25rem;
+        }
+        
+        code {
+            background-color: #f8f9fa;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+    </style>
+}

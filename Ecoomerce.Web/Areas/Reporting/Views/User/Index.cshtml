@@ -7,86 +7,104 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2>User Report</h2>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div>
+                    <h1 class="h4 mb-0">User Report</h1>
+                    <p class="text-muted mb-0">Customer insights and engagement metrics</p>
+                </div>
+            </div>
             
             @if (TempData["Error"] != null)
             {
-                <div class="alert alert-danger">@TempData["Error"]</div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             }
             
             @if (summary != null)
             {
-                <div class="row mb-4">
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Users</h5>
-                                <h3 class="text-primary">@summary.TotalUsers</h3>
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="text-muted small">Total Users</div>
+                                <div class="fs-5 fw-semibold text-primary">@summary.TotalUsers</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">New This Month</h5>
-                                <h3 class="text-success">@summary.NewUsersThisMonth</h3>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="text-muted small">New This Month</div>
+                                <div class="fs-5 fw-semibold text-success">@summary.NewUsersThisMonth</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">Active Users</h5>
-                                <h3 class="text-info">@summary.ActiveUsers</h3>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="text-muted small">Active Users</div>
+                                <div class="fs-5 fw-semibold text-info">@summary.ActiveUsers</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">With Orders</h5>
-                                <h3 class="text-warning">@summary.UsersWithOrders</h3>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="text-muted small">With Orders</div>
+                                <div class="fs-5 fw-semibold text-warning">@summary.UsersWithOrders</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">Without Orders</h5>
-                                <h3 class="text-danger">@summary.UsersWithoutOrders</h3>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="text-muted small">Without Orders</div>
+                                <div class="fs-5 fw-semibold text-danger">@summary.UsersWithoutOrders</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">Avg Orders/User</h5>
-                                <h3 class="text-secondary">@summary.AverageOrdersPerUser.ToString("F1")</h3>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="text-muted small">Avg Orders/User</div>
+                                <div class="fs-5 fw-semibold text-secondary">@summary.AverageOrdersPerUser.ToString("F1")</div>
                             </div>
                         </div>
                     </div>
                 </div>
             }
             
-            <div class="row mb-3">
-                <div class="col-md-8">
-                    <form method="get" class="d-flex">
-                        <input type="date" name="startDate" class="form-control me-2" 
-                               value="@ViewBag.StartDate" placeholder="Start Date">
-                        <input type="date" name="endDate" class="form-control me-2" 
-                               value="@ViewBag.EndDate" placeholder="End Date">
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                    </form>
-                </div>
-                <div class="col-md-4 text-end">
-                    <a href="@Url.Action("Activity")" class="btn btn-info">User Activity</a>
-                    <a href="@Url.Action("RegistrationTrend")" class="btn btn-warning">Registration Trend</a>
-                    <a href="@Url.Action("TopCustomers")" class="btn btn-success">Top Customers</a>
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-12 col-md-7">
+                            <form method="get" class="d-flex gap-2">
+                                <input type="date" name="startDate" class="form-control" 
+                                       value="@ViewBag.StartDate" placeholder="Start Date">
+                                <input type="date" name="endDate" class="form-control" 
+                                       value="@ViewBag.EndDate" placeholder="End Date">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-funnel"></i> Filter
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-5 text-md-end">
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("Activity")" class="btn btn-sm btn-outline-secondary">Activity</a>
+                                <a href="@Url.Action("RegistrationTrend")" class="btn btn-sm btn-outline-secondary">Trends</a>
+                                <a href="@Url.Action("TopCustomers")" class="btn btn-sm btn-outline-secondary">Top Customers</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="table-responsive">
-                <table class="table table-striped">
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
                             <th>User ID</th>
@@ -124,14 +142,16 @@
                         }
                     </tbody>
                 </table>
+                
+                @if (!Model.Any())
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <p class="text-muted mt-2">No user data available for the selected period.</p>
+                    </div>
+                }
             </div>
-            
-            @if (!Model.Any())
-            {
-                <div class="text-center py-4">
-                    <p class="text-muted">No user data available for the selected period.</p>
-                </div>
-            }
+        </div>
         </div>
     </div>
 </div>

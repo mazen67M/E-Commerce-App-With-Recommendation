@@ -1,0 +1,272 @@
+@model List<Ecommerce.Application.DTOs.Products.ProductDto>
+@{
+    ViewData["Title"] = "Compare Products";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Product" asp-action="Index">Products</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Compare</li>
+                </ol>
+            </nav>
+            <h1 class="display-6 fw-bold text-primary">Compare Products</h1>
+            <p class="lead text-muted">Side-by-side comparison of selected products</p>
+        </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 200px;">Feature</th>
+                                    @foreach (var product in Model)
+                                    {
+                                        <th class="text-center">
+                                            <div class="position-relative">
+                                                @if (!string.IsNullOrEmpty(product.ImageURL))
+                                                {
+                                                    <img src="@product.ImageURL" alt="@product.Name" 
+                                                         class="img-fluid mb-2" style="height: 150px; object-fit: cover;">
+                                                }
+                                                else
+                                                {
+                                                    <div class="bg-light d-flex align-items-center justify-content-center mb-2" 
+                                                         style="height: 150px;">
+                                                        <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                                                    </div>
+                                                }
+                                                <h6 class="fw-bold">@product.Name</h6>
+                                            </div>
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Price -->
+                                <tr>
+                                    <td class="fw-bold">Price</td>
+                                    @foreach (var product in Model)
+                                    {
+                                        <td class="text-center">
+                                            <h5 class="text-success mb-0">@product.Price.ToString("C")</h5>
+                                        </td>
+                                    }
+                                </tr>
+
+                                <!-- Category -->
+                                <tr>
+                                    <td class="fw-bold">Category</td>
+                                    @foreach (var product in Model)
+                                    {
+                                        <td class="text-center">
+                                            <span class="badge bg-secondary">@product.CategoryName</span>
+                                        </td>
+                                    }
+                                </tr>
+
+                                <!-- Brand -->
+                                <tr>
+                                    <td class="fw-bold">Brand</td>
+                                    @foreach (var product in Model)
+                                    {
+                                        <td class="text-center">
+                                            @if (!string.IsNullOrEmpty(product.BrandName))
+                                            {
+                                                <span class="badge bg-info">@product.BrandName</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">N/A</span>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+
+                                <!-- Rating -->
+                                <tr>
+                                    <td class="fw-bold">Rating</td>
+                                    @foreach (var product in Model)
+                                    {
+                                        <td class="text-center">
+                                            @if (product.AverageRating > 0)
+                                            {
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        @if (i <= product.AverageRating)
+                                                        {
+                                                            <i class="bi bi-star-fill text-warning"></i>
+                                                        }
+                                                        else if (i - 0.5 <= product.AverageRating)
+                                                        {
+                                                            <i class="bi bi-star-half text-warning"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-star text-muted"></i>
+                                                        }
+                                                    }
+                                                    <span class="ms-2">@product.AverageRating.ToString("F1")</span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No ratings</span>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+
+                                <!-- Availability -->
+                                <tr>
+                                    <td class="fw-bold">Availability</td>
+                                    @foreach (var product in Model)
+                                    {
+                                        <td class="text-center">
+                                            @if (product.IsAvailable)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle"></i> In Stock
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-x-circle"></i> Out of Stock
+                                                </span>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+
+                                <!-- Description -->
+                                <tr>
+                                    <td class="fw-bold">Description</td>
+                                    @foreach (var product in Model)
+                                    {
+                                        <td class="text-center">
+                                            @if (!string.IsNullOrEmpty(product.Description))
+                                            {
+                                                <small class="text-muted">@product.Description</small>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No description</span>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+
+                                <!-- Actions -->
+                                <tr>
+                                    <td class="fw-bold">Actions</td>
+                                    @foreach (var product in Model)
+                                    {
+                                        <td class="text-center">
+                                            <div class="d-grid gap-2">
+                                                <a asp-action="Details" asp-route-id="@product.ProductID" 
+                                                   class="btn btn-outline-primary btn-sm">
+                                                    <i class="bi bi-eye"></i> View Details
+                                                </a>
+                                                @if (product.IsAvailable)
+                                                {
+                                                    <button type="button" class="btn btn-primary btn-sm" 
+                                                            onclick="addToCart(@product.ProductID)">
+                                                        <i class="bi bi-cart-plus"></i> Add to Cart
+                                                    </button>
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Products
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function addToCart(productId) {
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Product")',
+                type: 'POST',
+                data: { productId: productId, quantity: 1 },
+                success: function(response) {
+                    if (response.success) {
+                        showNotification(response.message, 'success');
+                    } else {
+                        if (response.message.includes('authenticated')) {
+                            showNotification('Please login to add items to cart', 'warning');
+                            setTimeout(function() {
+                                window.location.href = '@Url.Action("Login", "Account")';
+                            }, 1500);
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    }
+                },
+                error: function() {
+                    showNotification('Failed to add product to cart', 'error');
+                }
+            });
+        }
+
+        function showNotification(message, type) {
+            var alertClass = type === 'success' ? 'alert-success' : 
+                           type === 'error' ? 'alert-danger' : 
+                           type === 'warning' ? 'alert-warning' : 'alert-info';
+            
+            var notification = $(`
+                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                     style="top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 3000);
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        
+        .table thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            z-index: 10;
+        }
+    </style>
+}

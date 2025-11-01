@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Ecommerce.Application.DTOs.Order;
 using Ecommerce.Application.DTOs.User;
 using Ecommerce.Application.Services.Interfaces;
@@ -48,12 +48,7 @@ namespace Ecommerce.Application.Services.Implementations
 
         public async Task<UserDto> GetUserProfileAsync(string userId)
         {
-            // userId is string, but GetByIdAsync expects int.
-            // You need to convert userId to int.
-            if (!int.TryParse(userId, out int userIdInt))
-                return null;
-
-            var user = await _userRepository.GetByIdAsync(userIdInt);
+            var user = await _userRepository.GetUserWithCartAsync(userId);
             if (user == null)
                 return null;
 
@@ -66,6 +61,7 @@ namespace Ecommerce.Application.Services.Implementations
                 PhoneNumber = user.PhoneNumber,
                 AddressLine1 = user.AddressLine1,
                 Country = user.Country,
+                ImageUrl = user.ImageUrl,
                 CreatedAt = user.CreatedAt
             };
         }
@@ -82,11 +78,7 @@ namespace Ecommerce.Application.Services.Implementations
 
         public async Task UpdateUserProfileAsync(string userId, UpdateUserDto userDto)
         {
-            // userId is string, but GetByIdAsync expects int.
-            if (!int.TryParse(userId, out int userIdInt))
-                return;
-
-            var user = await _userRepository.GetByIdAsync(userIdInt);
+            var user = await _userRepository.GetUserWithCartAsync(userId);
             if (user != null)
             {
                 user.FirstName = userDto.FirstName;
@@ -94,9 +86,11 @@ namespace Ecommerce.Application.Services.Implementations
                 user.PhoneNumber = userDto.PhoneNumber;
                 user.AddressLine1 = userDto.AddressLine1;
                 user.Country = userDto.Country;
+                user.ImageUrl = userDto.ImageUrl;
                 user.UpdatedAt = DateTime.UtcNow;
 
                 await _userRepository.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
             }
         }
     }
