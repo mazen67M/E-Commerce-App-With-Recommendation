@@ -75,6 +75,8 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 builder.Services.AddScoped<IShippingService, ShippingService>();
+builder.Services.AddScoped<IActivityLogService, ActivityLogService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ILoggingService, LoggingService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
@@ -92,6 +94,13 @@ builder.Services.AddTransient<IEmailSenderService, SmtpEmailSenderService>();
 // File Upload Service Registration
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
+// Google Authentication (built into ASP.NET Core 8 - no extra package needed)
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+    });
 var app = builder.Build();
 
 // Middleware

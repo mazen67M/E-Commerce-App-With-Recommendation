@@ -1,0 +1,230 @@
+@{
+    ViewData["Title"] = "Shipping Information";
+}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i> Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Shipping Information</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold"><i class="bi bi-truck text-primary me-3"></i>Shipping <span class="text-primary">Information</span></h1>
+        <p class="lead text-muted">Everything you need to know about our shipping policies and delivery times</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Shipping Options -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-primary text-white rounded-top-4">
+                    <h4 class="mb-0"><i class="bi bi-box-seam me-2"></i>Shipping Options</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Shipping Method</th>
+                                    <th>Delivery Time</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                                                <i class="bi bi-box text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Standard Shipping</strong>
+                                                <p class="mb-0 small text-muted">Best for regular orders</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>3-5 Business Days</td>
+                                    <td>25.00 L.E</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-success bg-opacity-10 rounded-circle p-2 me-3">
+                                                <i class="bi bi-lightning text-success"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Express Shipping</strong>
+                                                <p class="mb-0 small text-muted">Fast delivery option</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>1-2 Business Days</td>
+                                    <td>50.00 L.E</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3">
+                                                <i class="bi bi-clock text-warning"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Same Day Delivery</strong>
+                                                <p class="mb-0 small text-muted">Cairo only, order before 12 PM</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Same Day</td>
+                                    <td>75.00 L.E</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Free Shipping -->
+            <div class="card border-0 shadow-sm rounded-4 bg-success bg-opacity-10 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success rounded-circle p-3 me-4">
+                            <i class="bi bi-gift text-white fs-4"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-success mb-1">Free Shipping!</h4>
+                            <p class="mb-0 text-muted">Enjoy free standard shipping on all orders over <strong>500 L.E</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Areas -->
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-bottom">
+                    <h4 class="mb-0"><i class="bi bi-geo-alt me-2"></i>Delivery Areas</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-3">Greater Cairo</h6>
+                            <ul class="list-unstyled text-muted">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Cairo</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Giza</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>6th of October</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>New Cairo</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Helwan</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-3">Other Cities</h6>
+                            <ul class="list-unstyled text-muted">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Alexandria</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Luxor</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Aswan</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Port Said</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>And more...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Order Tracking -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 80px; height: 80px;">
+                        <i class="bi bi-search fs-2 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold">Track Your Order</h5>
+                    <p class="text-muted small mb-3">Enter your order number to check delivery status</p>
+                    <form>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Order ID">
+                            <button class="btn btn-primary" type="button">Track</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Important Notes -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle text-info me-2"></i>Important Notes</h5>
+                    <ul class="list-unstyled text-muted small">
+                        <li class="mb-2"><i class="bi bi-dot fs-4 text-primary"></i>Delivery times exclude weekends and public holidays</li>
+                        <li class="mb-2"><i class="bi bi-dot fs-4 text-primary"></i>Signature may be required upon delivery</li>
+                        <li class="mb-2"><i class="bi bi-dot fs-4 text-primary"></i>Additional fees may apply to remote areas</li>
+                        <li class="mb-2"><i class="bi bi-dot fs-4 text-primary"></i>Large items may have different shipping rates</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="card border-0 shadow-sm rounded-4 gradient-primary text-white">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-headset display-4 mb-3"></i>
+                    <h5 class="fw-bold">Need Help?</h5>
+                    <p class="small text-white-50 mb-3">Our support team is here to assist you</p>
+                    <a asp-controller="Home" asp-action="Contact" class="btn btn-light">
+                        <i class="bi bi-envelope me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shipping FAQ -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h3 class="fw-bold mb-4 text-center">Shipping FAQ</h3>
+            <div class="accordion" id="shippingFaq">
+                <div class="accordion-item border-0 shadow-sm mb-3 rounded-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How do I know when my order ships?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#shippingFaq">
+                        <div class="accordion-body text-muted">
+                            You'll receive an email notification with tracking information as soon as your order ships. 
+                            You can also check your order status in your account's Order History.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-0 shadow-sm mb-3 rounded-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Can I change my shipping address after ordering?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#shippingFaq">
+                        <div class="accordion-body text-muted">
+                            You can change your shipping address within 1 hour of placing your order, provided it hasn't 
+                            been processed yet. Contact our customer support immediately to request a change.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-0 shadow-sm rounded-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            What if I'm not home during delivery?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#shippingFaq">
+                        <div class="accordion-body text-muted">
+                            Our courier will attempt delivery up to 2 times. If you're unavailable, they'll leave a 
+                            notice with instructions to reschedule or pick up at a nearby location.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

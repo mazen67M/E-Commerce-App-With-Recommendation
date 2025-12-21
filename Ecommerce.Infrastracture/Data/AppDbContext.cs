@@ -1,4 +1,4 @@
-﻿using Ecommerce.Core.Entities;
+using Ecommerce.Core.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +25,7 @@ namespace Ecommerce.Infrastructure.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<InventoryLog> InventoryLogs { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -73,6 +73,12 @@
                     <span>Don't have an account?</span>
                     <a asp-action="Register" class="text-decoration-none ms-1">Register here</a>
                 </div>
+                <form asp-action="ExternalLogin" method="post">
+                    <input type="hidden" name="provider" value="Google" />
+                    <button type="submit" class="btn btn-outline-danger w-100">
+                        <i class="bi bi-google me-2"></i>Sign in with Google
+                    </button>
+                </form>
             </div>
 
         </div>

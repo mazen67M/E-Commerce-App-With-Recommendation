@@ -1,4 +1,4 @@
-﻿using Ecommerce.Core.Interfaces;
+using Ecommerce.Core.Interfaces;
 using Ecommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -7,7 +7,7 @@ namespace Ecommerce.Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly AppDbContext _context;
+        protected readonly AppDbContext _context;
 
         public Repository(AppDbContext context)
         {

@@ -20,13 +20,22 @@ namespace Ecommerce.Web.Areas.Profile.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IFileUploadService _fileUploadService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ManageProfileController(IUserService userService, IMapper mapper, IFileUploadService fileUploadService)
-        {
-            _userService = userService;
-            _mapper = mapper;
-            _fileUploadService = fileUploadService;
-        }
+       public ManageProfileController(
+    IUserService userService, 
+    IMapper mapper, 
+    IFileUploadService fileUploadService,
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager)
+{
+    _userService = userService;
+    _mapper = mapper;
+    _fileUploadService = fileUploadService;
+    _userManager = userManager;
+    _signInManager = signInManager;
+}
 
         [HttpGet]
         [Route("")]
@@ -61,6 +70,50 @@ namespace Ecommerce.Web.Areas.Profile.Controllers
             TempData["SuccessMessage"] = "Your profile has been updated successfully.";
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        [Route("ChangePassword")]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("User Not Found");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+           
+           if (!result.Succeeded)
+           {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
+           }
+
+            // Refresh sign-in cookie for security
+            await _signInManager.RefreshSignInAsync(user);
+
+            TempData["SuccessMessage"] = "Your password has been changed successfully.";
+            return RedirectToAction("Index");
+            
+        }
+
+
 
         [HttpPost]
         [Route("UploadProfilePicture")]

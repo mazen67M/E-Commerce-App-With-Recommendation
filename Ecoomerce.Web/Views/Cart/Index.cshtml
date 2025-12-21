@@ -1,0 +1,303 @@
+@model Ecommerce.Application.ViewModels.CartViewModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-3">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    @if (Model.Items != null && Model.Items.Any())
+    {
+        <div class="row g-4">
+            <!-- Cart Items -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Cart Items (@Model.Items.Count)</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr class="fade-in">
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-3" style="width: 60px; height: 60px;">
+                                                        <img src="@(item.ImageURL ?? "/images/placeholder.jpg")" alt="@item.ProductName" 
+                                                             class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0">@item.ProductName</h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><strong>@item.UnitPrice.ToString("N2") L.E</strong></td>
+                                            <td>
+                                                <div class="input-group input-group-sm" style="width: 130px;">
+                                                    <button class="btn btn-outline-primary" type="button" 
+                                                            onclick="updateQuantity(@item.ProductID, -1)">
+                                                        <i class="bi bi-dash"></i>
+                                                    </button>
+                                                    <input type="text" class="form-control text-center fw-bold" value="@item.Quantity" 
+                                                           id="quantity-@item.ProductID" readonly>
+                                                    <button class="btn btn-outline-primary" type="button" 
+                                                            onclick="updateQuantity(@item.ProductID, 1)">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="fw-bold">@((item.UnitPrice * item.Quantity).ToString("N2")) L.E</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-danger" 
+                                                        onclick="removeItem(@item.ProductID)">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-primary">
+                                <i class="bi bi-arrow-left"></i> Continue Shopping
+                            </a>
+                            <button class="btn btn-outline-secondary" onclick="clearCart()">
+                                <i class="bi bi-x-circle"></i> Clear Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal</span>
+                            <span id="subtotal">@Model.Items.Sum(i => i.UnitPrice * i.Quantity).ToString("N2") L.E</span>
+                        </div>
+                        @if (Model.Discount > 0)
+                        {
+                            <div class="d-flex justify-content-between mb-2 text-success">
+                                <span>Discount</span>
+                                <span>-@Model.Discount.ToString("N2") L.E</span>
+                            </div>
+                        }
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping</span>
+                            <span id="shipping" data-value="@Model.Shipping">@Model.Shipping.ToString("N2") L.E</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax</span>
+                            <span id="tax" data-rate="0.14">@Model.Tax.ToString("N2") L.E</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total</strong>
+                            <strong id="total" class="text-primary">@((Model.Items.Sum(i => i.UnitPrice * i.Quantity) + Model.Shipping + Model.Tax - Model.Discount).ToString("N2")) L.E</strong>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control" placeholder="Promo Code">
+                        </div>
+                        <button class="btn btn-outline-secondary w-100 mb-3">Apply Promo Code</button>
+                        <a href="@Url.Action("Index", "Checkout")" class="btn btn-primary btn-lg w-100 hover-lift">
+                            <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5">
+                <div class="mb-4">
+                    <i class="bi bi-cart text-muted" style="font-size: 4rem;"></i>
+                </div>
+                <h3>Your cart is empty</h3>
+                <p class="text-muted mb-4">Looks like you haven't added any products to your cart yet.</p>
+                <a href="@Url.Action("Index", "Product")" class="btn btn-primary">
+                    Start Shopping
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function updateQuantity(productId, change) {
+            const quantityInput = document.getElementById(`quantity-${productId}`);
+            let newQuantity = parseInt(quantityInput.value) + change;
+            
+            // Ensure quantity is at least 1
+            if (newQuantity < 1) newQuantity = 1;
+            
+            // Show loading indicator
+            const row = quantityInput.closest('tr');
+            const loadingSpinner = $('<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>');
+            const buttons = row.querySelectorAll('button');
+            
+            // Disable buttons during AJAX call
+            buttons.forEach(btn => btn.disabled = true);
+            $(quantityInput).after(loadingSpinner);
+            
+            $.ajax({
+                url: '@Url.Action("UpdateQuantity", "Cart")',
+                type: 'POST',
+                data: { 
+                    productId: productId, 
+                    quantity: newQuantity 
+                },
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update the UI without page reload
+                        quantityInput.value = newQuantity;
+                        
+                        // Update item total price
+                        const unitPrice = parseFloat(row.querySelector('td:nth-child(2)').innerText.replace(/[^0-9.-]+/g, ''));
+                        const totalPrice = unitPrice * newQuantity;
+                        row.querySelector('td:nth-child(4)').innerText = totalPrice.toFixed(2) + ' L.E';
+                        
+                        // Update cart subtotal, tax, and total
+                        updateCartTotals();
+                        
+                        showNotification(response.message, 'success');
+                    } else {
+                        showNotification(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showNotification('Failed to update quantity', 'error');
+                },
+                complete: function() {
+                    // Remove loading spinner and re-enable buttons
+                    loadingSpinner.remove();
+                    buttons.forEach(btn => btn.disabled = false);
+                }
+            });
+        }
+        
+        function updateCartTotals() {
+            // Calculate subtotal from all items
+            let subtotal = 0;
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const totalText = row.querySelector('td:nth-child(4)').innerText;
+                subtotal += parseFloat(totalText.replace(/[^0-9.-]+/g, ''));
+            });
+            
+            // Update subtotal display
+            document.getElementById('subtotal').innerText = subtotal.toFixed(2) + ' L.E';
+            
+            // Get tax rate and shipping from data attributes
+            const taxRate = parseFloat(document.getElementById('tax').dataset.rate || 0.14);
+            const shipping = parseFloat(document.getElementById('shipping').dataset.value || 0);
+            
+            // Calculate and update tax
+            const tax = subtotal * taxRate;
+            document.getElementById('tax').innerText = tax.toFixed(2) + ' L.E';
+            
+            // Calculate and update total
+            const total = subtotal + tax + shipping;
+            document.getElementById('total').innerText = total.toFixed(2) + ' L.E';
+        }
+        
+        function removeItem(productId) {
+            if (confirm('Are you sure you want to remove this item from your cart?')) {
+                $.ajax({
+                    url: '@Url.Action("RemoveItem", "Cart")',
+                    type: 'POST',
+                    data: { productId: productId },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showNotification(response.message, 'success');
+                            // Reload the page
+                            location.reload();
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        showNotification('Failed to remove item', 'error');
+                    }
+                });
+            }
+        }
+        
+        function clearCart() {
+            if (confirm('Are you sure you want to clear your entire cart?')) {
+                $.ajax({
+                    url: '@Url.Action("ClearCart", "Cart")',
+                    type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showNotification(response.message, 'success');
+                            // Reload the page
+                            location.reload();
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        showNotification('Failed to clear cart', 'error');
+                    }
+                });
+            }
+        }
+        
+        function showNotification(message, type) {
+            var alertClass = type === 'success' ? 'alert-success' : 
+                           type === 'error' ? 'alert-danger' : 
+                           type === 'warning' ? 'alert-warning' : 'alert-info';
+            
+            var notification = $(`
+                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                     style="top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 3000);
+        }
+    </script>
+}

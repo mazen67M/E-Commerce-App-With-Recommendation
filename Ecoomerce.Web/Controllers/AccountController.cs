@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Ecommerce.Core.Entities;
+
 
 namespace Ecoomerce.Web.Controllers
 {
@@ -19,19 +22,28 @@ namespace Ecoomerce.Web.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IUserService _userService;
         private readonly IEmailSenderService _emailSender;
+        private readonly IActivityLogService _activityLogService;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AccountController(
             IAuthenticationService authService,
             IMapper mapper,
             ILogger<AccountController> logger,
             IUserService userService,
-            IEmailSenderService emailSender)
+            IEmailSenderService emailSender,
+            IActivityLogService activityLogService,
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager)
         {
             _authService = authService;
             _mapper = mapper;
             _logger = logger;
             _userService = userService;
             _emailSender = emailSender;
+            _activityLogService = activityLogService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -58,6 +70,14 @@ namespace Ecoomerce.Web.Controllers
                 var user = await _authService.GetUserByEmailAsync(model.Email);
                 if (user != null)
                 {
+                    // Log user registration activity
+                    await _activityLogService.LogActivityAsync(
+                        user.Id,
+                        "UserRegistered",
+                        "User",
+                        null,
+                        $"New user registered: {model.Email}"
+                    );
                     var token = await _authService.GenerateEmailConfirmationTokenAsync(user.Id);
                     var confirmationLink = Url.Action("ConfirmEmail", "Account",
                         new { userId = user.Id, token = token }, Request.Scheme);
@@ -111,6 +131,20 @@ namespace Ecoomerce.Web.Controllers
             if (result.IsSuccess)
             {
                 _logger.LogInformation($"User logged in: {model.Email}");
+                
+                // Log user login activity
+                var user = await _authService.GetUserByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    await _activityLogService.LogActivityAsync(
+                        user.Id,
+                        "UserLogin",
+                        "User",
+                        null,
+                        $"User logged in: {model.Email}"
+                    );
+                }
+                
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     return Redirect(returnUrl);
                 return LocalRedirect(returnUrl ?? "/");
@@ -124,6 +158,20 @@ namespace Ecoomerce.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             var userName = User.Identity?.Name;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            // Log user logout activity
+            if (!string.IsNullOrEmpty(userId))
+            {
+                await _activityLogService.LogActivityAsync(
+                    userId,
+                    "UserLogout",
+                    "User",
+                    null,
+                    $"User logged out: {userName}"
+                );
+            }
+            
             await _authService.LogoutAsync();
             _logger.LogInformation($"User {userName} logged out.");
 
@@ -257,6 +305,111 @@ namespace Ecoomerce.Web.Controllers
                 ModelState.AddModelError(string.Empty, "Failed to reset password. The link may have expired.");
                 return View(model);
             }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider , string? returnUrl = null)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new {returnUrl});
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string? returnUrl =null, string? remoteError = null)
+        {
+            returnUrl ??= Url.Content("~/");
+            if (remoteError != null)
+            {
+                TempData["Error"] = "Error from external provider: " + remoteError;
+                return RedirectToAction("Login");
+            }
+
+            // Get the login information from external provider
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                TempData["Error"] = "Error loading external login information.";
+                return RedirectToAction("Login");
+            }
+
+            // Try to sign in with existing external login
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(
+                info.LoginProvider,
+                info.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: true                
+            );
+
+            if (signInResult.Succeeded)
+            {
+                _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
+                return LocalRedirect(returnUrl);
+            }
+
+            // If User Doesn't exists, create new account
+            var email= info.Principal.FindFirstValue(ClaimTypes.Email);
+            if(email == null)
+            {
+                TempData["Error"] = "Email claim is missing from provider.";
+                return RedirectToAction("Login");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user == null)
+            {
+                // Extract name from claims
+                var firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName) 
+                    ?? info.Principal.FindFirstValue(ClaimTypes.Name)?.Split(' ').FirstOrDefault() 
+                    ?? "User";
+                var lastName = info.Principal.FindFirstValue(ClaimTypes.Surname) 
+                    ?? info.Principal.FindFirstValue(ClaimTypes.Name)?.Split(' ').LastOrDefault() 
+                    ?? "";
+
+                // Create new user with required fields
+                user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true, // Email verified by provider
+                    FirstName = firstName,
+                    LastName = lastName,
+                    CreatedAt = DateTime.UtcNow
+                };
+                var result = await _userManager.CreateAsync(user);
+                if(!result.Succeeded)
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    TempData["Error"] = $"Failed to create user: {errors}";
+                    return RedirectToAction("Login");   
+                }
+
+                // Log Activity
+                await _activityLogService.LogActivityAsync(
+                    user.Id,
+                    "UserRegisteredViaGoogle",
+                    "User",
+                    null,
+                    $"New User Registered with Google: {email}"
+                );
+            }
+
+            // Link external login user
+            var addLoginResult = await _userManager.AddLoginAsync(user,info);
+            if(!addLoginResult.Succeeded)
+            {
+                TempData["Error"] = "Failed to link external login.";
+                return RedirectToAction("Login");
+            }
+
+            // Sign in the user
+            await _signInManager.SignInAsync(user,isPersistent:false);
+            _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
+
+            return LocalRedirect(returnUrl);
         }
     }
 }

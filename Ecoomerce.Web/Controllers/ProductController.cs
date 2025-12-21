@@ -12,19 +12,22 @@ namespace Ecoomerce.Web.Controllers
         private readonly ICartService _cartService;
         private readonly IWishlistService _wishlistService;
         private readonly ILogger<ProductController> _logger;
+        private readonly IActivityLogService _activityLogService;
 
         public ProductController(
             IProductService productService,
             IReviewService reviewService,
             ICartService cartService,
             IWishlistService wishlistService,
-            ILogger<ProductController> logger)
+            ILogger<ProductController> logger,
+            IActivityLogService activityLogService)
         {
             _productService = productService;
             _reviewService = reviewService;
             _cartService = cartService;
             _wishlistService = wishlistService;
             _logger = logger;
+            _activityLogService = activityLogService;
         }
 
         // Action for the main products page (handles searching and filtering)
@@ -220,6 +223,15 @@ namespace Ecoomerce.Web.Controllers
 
                 await _cartService.AddItemToCartAsync(userId, productId, quantity);
 
+                // Log cart activity
+                await _activityLogService.LogActivityAsync(
+                    userId,
+                    "CartItemAdded",
+                    "Product",
+                    productId,
+                    $"Added product '{product.Name}' to cart (Quantity: {quantity})"
+                );
+
                 return Json(new { success = true, message = "Product added to cart successfully!" });
             }
             catch (Exception ex)
@@ -257,11 +269,31 @@ namespace Ecoomerce.Web.Controllers
                 if (isInWishlist)
                 {
                     await _wishlistService.RemoveFromWishlistAsync(userId, productId);
+                    
+                    // Log wishlist removal activity
+                    await _activityLogService.LogActivityAsync(
+                        userId,
+                        "WishlistItemRemoved",
+                        "Product",
+                        productId,
+                        $"Removed product '{product.Name}' from wishlist"
+                    );
+                    
                     return Json(new { success = true, isInWishlist = false, message = "Removed from wishlist" });
                 }
                 else
                 {
                     await _wishlistService.AddToWishlistAsync(userId, productId);
+                    
+                    // Log wishlist addition activity
+                    await _activityLogService.LogActivityAsync(
+                        userId,
+                        "WishlistItemAdded",
+                        "Product",
+                        productId,
+                        $"Added product '{product.Name}' to wishlist"
+                    );
+                    
                     return Json(new { success = true, isInWishlist = true, message = "Added to wishlist!" });
                 }
             }

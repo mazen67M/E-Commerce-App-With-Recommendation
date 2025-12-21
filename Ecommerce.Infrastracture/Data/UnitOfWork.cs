@@ -28,6 +28,7 @@ namespace Ecommerce.Infrastructure.Data
         private IReviewRepository? _reviews;
         private IPromoCodeRepository? _promoCodes;
         private IWishlistRepository? _wishlists;
+        private IActivityLogRepository? _activityLogs;
 
         public UnitOfWork(AppDbContext context)
         {
@@ -47,6 +48,7 @@ namespace Ecommerce.Infrastructure.Data
         public IReviewRepository Reviews => _reviews ??= new ReviewRepository(_context);
         public IPromoCodeRepository PromoCodes => _promoCodes ??= new PromoCodeRepository(_context);
         public IWishlistRepository Wishlists => _wishlists ??= new WishlistRepository(_context);
+        public IActivityLogRepository ActivityLogs => _activityLogs ??= new ActivityLogRepository(_context);
 
         // Done
         public async Task BeginTransactionAsync()

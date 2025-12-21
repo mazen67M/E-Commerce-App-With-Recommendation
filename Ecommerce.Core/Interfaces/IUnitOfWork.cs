@@ -22,6 +22,7 @@ namespace Ecommerce.Core.Interfaces
         IReviewRepository Reviews { get; }
         IPromoCodeRepository PromoCodes { get; }
         IWishlistRepository Wishlists { get; }
+        IActivityLogRepository ActivityLogs { get; }
         
         // Transaction Methods
         Task<int> SaveChangesAsync();

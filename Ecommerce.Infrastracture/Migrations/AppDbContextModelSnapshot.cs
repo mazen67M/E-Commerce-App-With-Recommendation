@@ -22,6 +22,47 @@ namespace Ecommerce.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Ecommerce.Core.Entities.ActivityLog", b =>
+                {
+                    b.Property<int>("ActivityLogID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ActivityLogID"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EntityID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IPAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ActivityLogID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("ActivityLogs");
+                });
+
             modelBuilder.Entity("Ecommerce.Core.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -736,6 +777,15 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Ecommerce.Core.Entities.ActivityLog", b =>
+                {
+                    b.HasOne("Ecommerce.Core.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Ecommerce.Core.Entities.Cart", b =>

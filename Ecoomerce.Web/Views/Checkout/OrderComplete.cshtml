@@ -1,0 +1,140 @@
+
+@model Ecommerce.Application.DTOs.Order.OrderDetailsDto
+@{
+    ViewData["Title"] = "Order Complete";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <div class="success-animation">
+                            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <h1 class="h3 mb-3">Thank You for Your Order!</h1>
+                    <p class="text-muted mb-4">Your order has been placed successfully and is being processed.</p>
+                    
+                    <div class="order-details mb-4">
+                        <div class="row">
+                            <div class="col-sm-6 text-sm-end">
+                                <p class="mb-1"><strong>Order Number:</strong></p>
+                            </div>
+                            <div class="col-sm-6 text-sm-start">
+                                <p class="mb-1">#@Model.OrderID</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-sm-end">
+                                <p class="mb-1"><strong>Order Date:</strong></p>
+                            </div>
+                            <div class="col-sm-6 text-sm-start">
+                                <p class="mb-1">@Model.OrderDate.ToString("MMMM dd, yyyy")</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-sm-end">
+                                <p class="mb-1"><strong>Order Total:</strong></p>
+                            </div>
+                            <div class="col-sm-6 text-sm-start">
+                                <p class="mb-1">@Model.TotalAmount.ToString("C")</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-sm-end">
+                                <p class="mb-1"><strong>Payment Method:</strong></p>
+                            </div>
+                            <div class="col-sm-6 text-sm-start">
+                                <p class="mb-1">@Model.PaymentMethod</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-sm-end">
+                                <p class="mb-1"><strong>Status:</strong></p>
+                            </div>
+                            <div class="col-sm-6 text-sm-start">
+                                <p class="mb-1">@Model.Status</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mb-4">
+                        <p class="mb-0">A confirmation email will be sent to your registered email address.</p>
+                    </div>
+                    
+                    <div class="d-grid gap-3">
+                        <a asp-area="Profile" asp-controller="OrderHistory" asp-action="Details" asp-route-id="@Model.OrderID" class="btn btn-primary">View Order Details</a>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* Success Animation */
+        .success-animation {
+            margin: 0 auto;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #4bb71b;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #4bb71b;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #4bb71b;
+            fill: none;
+            animation: stroke .6s cubic-bezier(0.650, 0.000, 0.450, 1.000) forwards;
+        }
+        
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke .3s cubic-bezier(0.650, 0.000, 0.450, 1.000) .8s forwards;
+        }
+        
+        @@keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        @@keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+        
+        @@keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #4bb71b;
+            }
+        }
+    </style>
+}

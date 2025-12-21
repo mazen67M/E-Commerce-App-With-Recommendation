@@ -1,0 +1,333 @@
+@{
+    ViewData["Title"] = "Frequently Asked Questions";
+}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i> Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">FAQ</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Frequently Asked <span class="text-primary">Questions</span></h1>
+        <p class="lead text-muted">Find answers to common questions about shopping with us</p>
+    </div>
+
+    <!-- Search -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-6">
+            <div class="input-group input-group-lg shadow-sm">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control border-start-0" id="faqSearch" placeholder="Search for answers...">
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Categories -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3 col-6">
+            <a href="#orders" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="bi bi-box-seam fs-4 text-primary"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Orders</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="#shipping" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="bi bi-truck fs-4 text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Shipping</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="#returns" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="bi bi-arrow-return-left fs-4 text-warning"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Returns</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="#payment" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="bi bi-credit-card fs-4 text-info"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Payment</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Orders Section -->
+            <h3 id="orders" class="fw-bold mb-4 pt-4">
+                <i class="bi bi-box-seam text-primary me-2"></i>Orders
+            </h3>
+            <div class="accordion accordion-flush mb-5" id="ordersAccordion">
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#order1">
+                            How do I place an order?
+                        </button>
+                    </h2>
+                    <div id="order1" class="accordion-collapse collapse show" data-bs-parent="#ordersAccordion">
+                        <div class="accordion-body text-muted">
+                            Simply browse our products, add items to your cart, and proceed to checkout. 
+                            You'll need to create an account or log in, provide shipping information, and 
+                            complete payment. You'll receive a confirmation email once your order is placed.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#order2">
+                            How can I track my order?
+                        </button>
+                    </h2>
+                    <div id="order2" class="accordion-collapse collapse" data-bs-parent="#ordersAccordion">
+                        <div class="accordion-body text-muted">
+                            Log in to your account and go to "Order History" to view your orders and their 
+                            current status. Once shipped, you'll receive tracking information via email.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#order3">
+                            Can I modify or cancel my order?
+                        </button>
+                    </h2>
+                    <div id="order3" class="accordion-collapse collapse" data-bs-parent="#ordersAccordion">
+                        <div class="accordion-body text-muted">
+                            You can modify or cancel your order within 1 hour of placing it, provided it hasn't 
+                            been processed. Contact our customer support team immediately for assistance.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Section -->
+            <h3 id="shipping" class="fw-bold mb-4 pt-4">
+                <i class="bi bi-truck text-success me-2"></i>Shipping
+            </h3>
+            <div class="accordion accordion-flush mb-5" id="shippingAccordion">
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#ship1">
+                            What are the shipping options?
+                        </button>
+                    </h2>
+                    <div id="ship1" class="accordion-collapse collapse" data-bs-parent="#shippingAccordion">
+                        <div class="accordion-body text-muted">
+                            We offer Standard Shipping (3-5 business days) and Express Shipping (1-2 business days). 
+                            Shipping costs vary based on location and order value. Orders over 500 L.E qualify 
+                            for free standard shipping.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#ship2">
+                            Do you ship internationally?
+                        </button>
+                    </h2>
+                    <div id="ship2" class="accordion-collapse collapse" data-bs-parent="#shippingAccordion">
+                        <div class="accordion-body text-muted">
+                            Currently, we ship within Egypt only. We're working on expanding to other countries 
+                            in the region. Sign up for our newsletter to be notified when we launch international shipping.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#ship3">
+                            What if my package is lost or damaged?
+                        </button>
+                    </h2>
+                    <div id="ship3" class="accordion-collapse collapse" data-bs-parent="#shippingAccordion">
+                        <div class="accordion-body text-muted">
+                            Contact us immediately if your package is lost or damaged. We'll investigate with 
+                            our shipping partner and either resend the items or issue a full refund.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Returns Section -->
+            <h3 id="returns" class="fw-bold mb-4 pt-4">
+                <i class="bi bi-arrow-return-left text-warning me-2"></i>Returns & Refunds
+            </h3>
+            <div class="accordion accordion-flush mb-5" id="returnsAccordion">
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#ret1">
+                            What is your return policy?
+                        </button>
+                    </h2>
+                    <div id="ret1" class="accordion-collapse collapse" data-bs-parent="#returnsAccordion">
+                        <div class="accordion-body text-muted">
+                            We accept returns within 14 days of delivery for most items. Products must be unused, 
+                            in original packaging, and with all tags attached. Some items like personal care products 
+                            are non-returnable.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#ret2">
+                            How do I initiate a return?
+                        </button>
+                    </h2>
+                    <div id="ret2" class="accordion-collapse collapse" data-bs-parent="#returnsAccordion">
+                        <div class="accordion-body text-muted">
+                            Go to your Order History, select the order, and click "Request Return." Follow the 
+                            instructions to print a return label. Once we receive the item, we'll process your 
+                            refund within 5-7 business days.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#ret3">
+                            How long does a refund take?
+                        </button>
+                    </h2>
+                    <div id="ret3" class="accordion-collapse collapse" data-bs-parent="#returnsAccordion">
+                        <div class="accordion-body text-muted">
+                            Refunds are processed within 5-7 business days after we receive the returned item. 
+                            The amount will be credited to your original payment method. Bank processing may 
+                            take additional 3-5 days.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Section -->
+            <h3 id="payment" class="fw-bold mb-4 pt-4">
+                <i class="bi bi-credit-card text-info me-2"></i>Payment
+            </h3>
+            <div class="accordion accordion-flush mb-5" id="paymentAccordion">
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#pay1">
+                            What payment methods do you accept?
+                        </button>
+                    </h2>
+                    <div id="pay1" class="accordion-collapse collapse" data-bs-parent="#paymentAccordion">
+                        <div class="accordion-body text-muted">
+                            We accept Visa, MasterCard, and Cash on Delivery (COD). All online payments are 
+                            securely processed through encrypted connections.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#pay2">
+                            Is my payment information secure?
+                        </button>
+                    </h2>
+                    <div id="pay2" class="accordion-collapse collapse" data-bs-parent="#paymentAccordion">
+                        <div class="accordion-body text-muted">
+                            Yes! We use industry-standard SSL encryption and never store your complete card details. 
+                            Our payment processing is PCI-DSS compliant for maximum security.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#pay3">
+                            Do you offer installment payments?
+                        </button>
+                    </h2>
+                    <div id="pay3" class="accordion-collapse collapse" data-bs-parent="#paymentAccordion">
+                        <div class="accordion-body text-muted">
+                            Yes, for orders above 1,000 L.E, you can choose to pay in installments through select 
+                            bank cards. The option will appear at checkout if your card is eligible.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Still Need Help -->
+    <div class="text-center py-5 px-4 rounded-4 bg-light">
+        <h3 class="fw-bold mb-3">Still Have Questions?</h3>
+        <p class="text-muted mb-4">Can't find what you're looking for? We're here to help!</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-controller="Home" asp-action="Contact" class="btn btn-primary btn-lg">
+                <i class="bi bi-envelope me-2"></i>Contact Support
+            </a>
+            <a href="tel:+201276632422" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-telephone me-2"></i>Call Us
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(13, 110, 253, 0.05);
+            color: var(--primary-color);
+        }
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(13, 110, 253, 0.25);
+        }
+        .hover-lift {
+            transition: transform 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // FAQ Search functionality
+        document.getElementById('faqSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            
+            accordionItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

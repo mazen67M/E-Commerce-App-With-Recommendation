@@ -1,4 +1,4 @@
-﻿using Ecommerce.Core.Entities;
+using Ecommerce.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,9 +27,10 @@ namespace Ecommerce.Infrastructure.Data
                 await roleManager.CreateAsync(new IdentityRole(customerRole));
             }
 
-            // --- Seed Admin User ---
+            // --- Seed Admin Users ---
+            
+            // First Admin Account
             string adminEmail = "admin@ecommerce.com";
-
             if (await userManager.FindByEmailAsync(adminEmail) == null)
             {
                 var adminUser = new ApplicationUser
@@ -38,16 +39,33 @@ namespace Ecommerce.Infrastructure.Data
                     Email = adminEmail,
                     FirstName = "Admin",
                     LastName = "User",
-                    EmailConfirmed = true // Automatically confirm the email for the admin
+                    EmailConfirmed = true
                 };
 
-                // Create the user with a password
                 IdentityResult result = await userManager.CreateAsync(adminUser, "Admin@123!");
-
                 if (result.Succeeded)
                 {
-                    // Assign the "Admin" role to the new user
                     await userManager.AddToRoleAsync(adminUser, adminRole);
+                }
+            }
+
+            // Second Admin Account
+            string admin2Email = "mazen@ecommerce.com";
+            if (await userManager.FindByEmailAsync(admin2Email) == null)
+            {
+                var admin2User = new ApplicationUser
+                {
+                    UserName = admin2Email,
+                    Email = admin2Email,
+                    FirstName = "Mazen",
+                    LastName = "Admin",
+                    EmailConfirmed = true
+                };
+
+                IdentityResult result = await userManager.CreateAsync(admin2User, "Mazen@123!");
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(admin2User, adminRole);
                 }
             }
         }

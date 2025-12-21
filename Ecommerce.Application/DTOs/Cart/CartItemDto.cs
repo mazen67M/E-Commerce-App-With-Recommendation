@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ecommerce.Application.DTOs.Products;
 
 namespace Ecommerce.Application.DTOs.Cart
 {
@@ -15,5 +16,6 @@ namespace Ecommerce.Application.DTOs.Cart
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
         public decimal Total => UnitPrice * Quantity;
+        public ProductDto? Product { get; set; }
     }
 }

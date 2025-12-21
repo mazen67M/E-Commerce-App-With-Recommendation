@@ -14,7 +14,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Ecoomerce </a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-shop me-2"></i>ShopSmart
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,14 +24,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door"></i> Home
+                            </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="productsDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Products
+                                <i class="bi bi-grid"></i> Products
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+                            <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="productsDropdown">
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index">
                                         <i class="bi bi-grid"></i> All Products
                                     </a></li>
@@ -46,55 +50,74 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order"
-                                asp-action="Index">Orders</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="reportsDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Reports
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">
+                                <i class="bi bi-box-seam"></i> Orders
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
-                                <li><a class="dropdown-item" asp-area="Reporting" asp-controller="Sales"
-                                        asp-action="Index">
-                                        <i class="bi bi-graph-up"></i> Sales
-                                    </a></li>
-                                <li><a class="dropdown-item" asp-area="Reporting" asp-controller="Inventory"
-                                        asp-action="Index">
-                                        <i class="bi bi-box"></i> Inventory
-                                    </a></li>
-                                <li><a class="dropdown-item" asp-area="Reporting" asp-controller="User"
-                                        asp-action="Index">
-                                        <i class="bi bi-people"></i> Customers
-                                    </a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="accountDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Account
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                                <li><a class="dropdown-item" asp-area="Profile" asp-controller="ManageProfile"
-                                        asp-action="Index">
-                                        <i class="bi bi-gear"></i> Settings
-                                    </a></li>
-                                <li><a class="dropdown-item" asp-area="Profile" asp-controller="OrderHistory"
-                                        asp-action="Index">
-                                        <i class="bi bi-receipt"></i> Order History
-                                    </a></li>
-                                <li><a class="dropdown-item" asp-area="Profile" asp-controller="Wishlist"
-                                        asp-action="Index">
-                                        <i class="bi bi-heart"></i> Wishlist
-                                    </a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Help</a>
                         </li>
                     </ul>
-                    <partial name="_LoginPartial" />
+                    
+                    <div class="d-flex align-items-center">
+                        <!-- Search Form -->
+                        <form class="d-none d-md-flex me-3" asp-controller="Product" asp-action="Index" method="get">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="searchTerm" placeholder="Search products..." aria-label="Search">
+                                <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+                        
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <!-- Wishlist Button -->
+                            <a class="btn btn-outline-secondary position-relative me-2" asp-area="Profile" asp-controller="Wishlist" asp-action="Index" title="Wishlist">
+                                <i class="bi bi-heart"></i>
+                                <span id="wishlistCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+                                    0
+                                </span>
+                            </a>
+                            
+                            <!-- Cart Button -->
+                            <a class="btn btn-outline-primary position-relative me-3" asp-controller="Cart" asp-action="Index" title="Shopping Cart">
+                                <i class="bi bi-cart3"></i>
+                                <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+                                    0
+                                </span>
+                            </a>
+                            
+                            <!-- User Account Dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="userMenuDropdown">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                            <i class="bi bi-shield-check text-danger"></i> Admin Dashboard
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    }
+                                    <li><a class="dropdown-item" asp-area="Profile" asp-controller="Dashboard" asp-action="Index">
+                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-area="Profile" asp-controller="OrderHistory" asp-action="Index">
+                                        <i class="bi bi-receipt"></i> Order History
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-area="Profile" asp-controller="Wishlist" asp-action="Index">
+                                        <i class="bi bi-heart"></i> My Wishlist
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Profile">
+                                        <i class="bi bi-gear"></i> Settings
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                        <i class="bi bi-question-circle"></i> Help
+                                    </a></li>
+                                </ul>
+                            </div>
+                        }
+                        
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>

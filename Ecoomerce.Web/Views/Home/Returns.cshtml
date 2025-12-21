@@ -1,0 +1,226 @@
+@{
+    ViewData["Title"] = "Returns & Refunds";
+}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i> Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Returns & Refunds</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold"><i class="bi bi-arrow-return-left text-primary me-3"></i>Returns & <span class="text-primary">Refunds</span></h1>
+        <p class="lead text-muted">Easy returns and hassle-free refunds for your peace of mind</p>
+    </div>
+
+    <!-- Return Process Steps -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 text-center mb-3">
+            <h3 class="fw-bold">How to Return an Item</h3>
+            <p class="text-muted">Follow these simple steps to return your purchase</p>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width: 80px; height: 80px;">
+                    <span class="text-white display-6">1</span>
+                </div>
+                <h5 class="fw-bold">Request Return</h5>
+                <p class="text-muted small">Log in and go to Order History to initiate a return request</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width: 80px; height: 80px;">
+                    <span class="text-white display-6">2</span>
+                </div>
+                <h5 class="fw-bold">Pack Item</h5>
+                <p class="text-muted small">Package the item securely in its original packaging</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width: 80px; height: 80px;">
+                    <span class="text-white display-6">3</span>
+                </div>
+                <h5 class="fw-bold">Ship Back</h5>
+                <p class="text-muted small">Use the prepaid shipping label or drop off at a location</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width: 80px; height: 80px;">
+                    <span class="text-white display-6">4</span>
+                </div>
+                <h5 class="fw-bold">Get Refund</h5>
+                <p class="text-muted small">Receive your refund within 5-7 business days</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <!-- Return Policy -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-primary text-white rounded-top-4">
+                    <h4 class="mb-0"><i class="bi bi-clipboard-check me-2"></i>Return Policy</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary bg-opacity-10 rounded p-3">
+                                <i class="bi bi-calendar-check text-primary fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="fw-bold">14-Day Return Window</h5>
+                            <p class="text-muted mb-0">You have 14 days from the delivery date to return most items for a full refund.</p>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Conditions for Returns</h6>
+                    <ul class="text-muted">
+                        <li>Items must be unused and in their original condition</li>
+                        <li>Items must be in original packaging with all tags attached</li>
+                        <li>Proof of purchase (order confirmation or receipt) is required</li>
+                        <li>Items must not show signs of wear, damage, or alteration</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Returnable vs Non-Returnable -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-success border-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-success mb-3"><i class="bi bi-check-circle me-2"></i>Returnable Items</h5>
+                            <ul class="list-unstyled text-muted mb-0">
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Clothing & Apparel</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Electronics (unopened)</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Home & Kitchen</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Books & Media</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Toys & Games</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-danger border-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-danger mb-3"><i class="bi bi-x-circle me-2"></i>Non-Returnable Items</h5>
+                            <ul class="list-unstyled text-muted mb-0">
+                                <li class="mb-2"><i class="bi bi-x text-danger me-2"></i>Personal care & hygiene products</li>
+                                <li class="mb-2"><i class="bi bi-x text-danger me-2"></i>Intimate apparel & swimwear</li>
+                                <li class="mb-2"><i class="bi bi-x text-danger me-2"></i>Customized or personalized items</li>
+                                <li class="mb-2"><i class="bi bi-x text-danger me-2"></i>Perishable goods</li>
+                                <li class="mb-2"><i class="bi bi-x text-danger me-2"></i>Final sale items</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Refund Information -->
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-bottom">
+                    <h4 class="mb-0"><i class="bi bi-cash-coin me-2"></i>Refund Information</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Payment Method</th>
+                                    <th>Refund Method</th>
+                                    <th>Processing Time</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-muted">
+                                <tr>
+                                    <td>Credit/Debit Card</td>
+                                    <td>Original card</td>
+                                    <td>5-7 business days</td>
+                                </tr>
+                                <tr>
+                                    <td>Cash on Delivery</td>
+                                    <td>Bank transfer</td>
+                                    <td>7-10 business days</td>
+                                </tr>
+                                <tr>
+                                    <td>Store Credit</td>
+                                    <td>Store Credit balance</td>
+                                    <td>1-2 business days</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-info mt-4 mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Shipping costs are non-refundable unless the return is due to our error or a defective product.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Return Request -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 80px; height: 80px;">
+                        <i class="bi bi-arrow-return-left fs-2 text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold">Start a Return</h5>
+                    <p class="text-muted small mb-3">Log in to your account to initiate a return request</p>
+                    <a asp-area="Profile" asp-controller="OrderHistory" asp-action="Index" class="btn btn-primary w-100">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Go to Order History
+                    </a>
+                </div>
+            </div>
+
+            <!-- Exchange Option -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 bg-light">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-arrow-repeat text-primary me-2"></i>Exchange Instead?</h5>
+                    <p class="text-muted small mb-0">
+                        Want a different size or color? You can exchange eligible items within 14 days at no extra cost!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Damaged Items -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-exclamation-triangle text-warning me-2"></i>Damaged or Defective?</h5>
+                    <p class="text-muted small mb-3">
+                        If you received a damaged or defective item, contact us immediately. We'll arrange a free return 
+                        and send a replacement right away.
+                    </p>
+                    <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-envelope me-2"></i>Report Issue
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="card border-0 shadow-sm rounded-4 gradient-primary text-white">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-question-circle display-4 mb-3"></i>
+                    <h5 class="fw-bold">Need Help?</h5>
+                    <p class="small text-white-50 mb-3">Our team is ready to assist with your return</p>
+                    <a asp-controller="Home" asp-action="FAQ" class="btn btn-light">
+                        <i class="bi bi-collection me-2"></i>View FAQ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

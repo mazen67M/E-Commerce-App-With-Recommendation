@@ -90,6 +90,21 @@ namespace Ecoomerce.Web.Controllers
             return View();
         }
 
+        public IActionResult Terms()
+        {
+            return View();
+        }
+
+        public IActionResult Shipping()
+        {
+            return View();
+        }
+
+        public IActionResult Returns()
+        {
+            return View();
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

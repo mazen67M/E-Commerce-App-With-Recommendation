@@ -17,6 +17,7 @@ namespace Ecommerce.Application.DTOs.Products
         public string? BrandName { get; set; }
         public double AverageRating { get; set; }
         public int ReviewCount { get; set; }
+        public decimal DiscountPercentage { get; set; }
         public IEnumerable<string> Tags { get; set; } = new List<string>();
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

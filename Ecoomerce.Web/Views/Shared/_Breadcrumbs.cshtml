@@ -1,0 +1,34 @@
+@* 
+    Breadcrumbs Partial View
+    Usage: @await Html.PartialAsync("_Breadcrumbs", new Dictionary<string, string> { 
+        { "Home", "/" }, 
+        { "Products", "/Product" },
+        { "Current Page", "" }  // Empty URL means current (active) page
+    })
+*@
+
+@model Dictionary<string, string>
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        @foreach (var item in Model)
+        {
+            if (string.IsNullOrEmpty(item.Value))
+            {
+                <li class="breadcrumb-item active" aria-current="page">@item.Key</li>
+            }
+            else
+            {
+                <li class="breadcrumb-item">
+                    <a href="@item.Value" class="text-decoration-none">
+                        @if (item.Key == "Home")
+                        {
+                            <i class="bi bi-house"></i>
+                        }
+                        @item.Key
+                    </a>
+                </li>
+            }
+        }
+    </ol>
+</nav>

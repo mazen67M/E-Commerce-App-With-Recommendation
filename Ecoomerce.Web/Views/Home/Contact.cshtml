@@ -1,0 +1,213 @@
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i> Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Get in <span class="text-primary">Touch</span></h1>
+        <p class="lead text-muted">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+    </div>
+
+    <div class="row g-5">
+        <!-- Contact Form -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold mb-4">Send us a Message</h3>
+                    <form id="contactForm" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-person text-muted"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0" id="name" placeholder="John Doe" required>
+                                </div>
+                                <div class="invalid-feedback">Please enter your name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-envelope text-muted"></i>
+                                    </span>
+                                    <input type="email" class="form-control border-start-0" id="email" placeholder="john@example.com" required>
+                                </div>
+                                <div class="invalid-feedback">Please enter a valid email.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-telephone text-muted"></i>
+                                    </span>
+                                    <input type="tel" class="form-control border-start-0" id="phone" placeholder="+20 123 456 7890">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
+                                <select class="form-select" id="subject" required>
+                                    <option value="" selected disabled>Select a topic</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="order">Order Issue</option>
+                                    <option value="return">Returns & Refunds</option>
+                                    <option value="shipping">Shipping Question</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a subject.</div>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="message" rows="5" placeholder="How can we help you?" required></textarea>
+                                <div class="invalid-feedback">Please enter your message.</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="newsletter">
+                                    <label class="form-check-label text-muted" for="newsletter">
+                                        Subscribe to our newsletter for updates and offers
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-send me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 mb-4 gradient-primary text-white">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4"><i class="bi bi-headset me-2"></i>Contact Information</h4>
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <div class="bg-white bg-opacity-25 rounded-circle p-3">
+                                <i class="bi bi-geo-alt text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-1">Our Location</h6>
+                            <p class="mb-0 text-white-50">123 Main Street, Cairo, Egypt</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <div class="bg-white bg-opacity-25 rounded-circle p-3">
+                                <i class="bi bi-telephone text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-1">Phone Number</h6>
+                            <p class="mb-0 text-white-50">+20 127 663 2422</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <div class="bg-white bg-opacity-25 rounded-circle p-3">
+                                <i class="bi bi-envelope text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-1">Email Address</h6>
+                            <p class="mb-0 text-white-50">support@shopsmart.com</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <div class="bg-white bg-opacity-25 rounded-circle p-3">
+                                <i class="bi bi-clock text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-1">Business Hours</h6>
+                            <p class="mb-0 text-white-50">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Follow Us</h5>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-outline-primary rounded-circle" style="width: 50px; height: 50px;" title="Facebook">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-info rounded-circle" style="width: 50px; height: 50px;" title="Twitter">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger rounded-circle" style="width: 50px; height: 50px;" title="Instagram">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary rounded-circle" style="width: 50px; height: 50px;" title="LinkedIn">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger rounded-circle" style="width: 50px; height: 50px;" title="YouTube">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Link -->
+            <div class="card border-0 shadow-sm rounded-4 bg-light">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-question-circle display-4 text-primary mb-3"></i>
+                    <h5 class="fw-bold">Have Questions?</h5>
+                    <p class="text-muted mb-3">Check out our frequently asked questions</p>
+                    <a asp-controller="Home" asp-action="FAQ" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-right me-2"></i>View FAQ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="mt-5">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="ratio ratio-21x9">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.7144563660374!2d31.235711415115478!3d30.044419981884886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145840c6b4b3b3e5%3A0x5f5a5c73c3a3b0a0!2sCairo%2C%20Egypt!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus"
+                        style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            // Show success message
+            showNotification('Thank you! Your message has been sent. We\'ll get back to you soon.', 'success', 5000);
+            
+            // Reset form
+            this.reset();
+            this.classList.remove('was-validated');
+        });
+    </script>
+}

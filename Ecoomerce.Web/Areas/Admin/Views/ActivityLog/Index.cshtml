@@ -1,0 +1,181 @@
+@model IEnumerable<Ecommerce.Application.DTOs.ActivityLog.ActivityLogDto>
+@{
+    ViewData["Title"] = "Activity Logs";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold"><i class="bi bi-activity text-primary"></i> Activity Logs</h2>
+        <div>
+            <button class="btn btn-outline-primary" onclick="location.reload()">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-list-check fs-1 text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Total Activities</h6>
+                            <h3 class="mb-0">@Model.Count()</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-person-check fs-1 text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">User Logins</h6>
+                            <h3 class="mb-0">@Model.Count(a => a.Action == "UserLogin")</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-cart-plus fs-1 text-info"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Orders Created</h6>
+                            <h3 class="mb-0">@Model.Count(a => a.Action == "OrderCreated")</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-box-seam fs-1 text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Products Added</h6>
+                            <h3 class="mb-0">@Model.Count(a => a.Action == "ProductAdded")</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Log Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Recent Activities</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Entity Type</th>
+                            <th>Entity ID</th>
+                            <th>Details</th>
+                            <th>IP Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var log in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <small class="text-muted">
+                                            @log.Timestamp.ToString("MMM dd, yyyy HH:mm:ss")
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <strong>@(log.UserName ?? "Anonymous")</strong>
+                                        @if (!string.IsNullOrEmpty(log.UserID))
+                                        {
+                                            <br><small class="text-muted">@log.UserID</small>
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            var badgeClass = log.Action switch
+                                            {
+                                                "UserLogin" => "bg-success",
+                                                "UserRegistered" => "bg-primary",
+                                                "ProductAdded" => "bg-info",
+                                                "OrderCreated" => "bg-warning",
+                                                "ProductDeleted" => "bg-danger",
+                                                _ => "bg-secondary"
+                                            };
+                                        }
+                                        <span class="badge @badgeClass">@log.Action</span>
+                                    </td>
+                                    <td>@log.EntityType</td>
+                                    <td>
+                                        @if (log.EntityID.HasValue)
+                                        {
+                                            <code>#@log.EntityID</code>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(log.Details))
+                                        {
+                                            <small>@log.Details</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@(log.IPAddress ?? "N/A")</small>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <i class="bi bi-inbox fs-1 text-muted"></i>
+                                    <p class="text-muted mt-2">No activity logs found</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(function() {
+            location.reload();
+        }, 30000);
+    </script>
+}
