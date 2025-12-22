@@ -363,6 +363,49 @@ namespace Ecoomerce.Web.Controllers
             }
         }
 
+        // Get latest products - View
+        [HttpGet]
+        public async Task<IActionResult> Latest(int count = 12)
+        {
+            try
+            {
+                _logger.LogInformation("Fetching {Count} latest products", count);
+                var products = await _productService.GetAllProductsAsync();
+                var latestProducts = products.OrderByDescending(p => p.CreatedAt).Take(count).ToList();
+                ViewBag.Title = "Latest Arrivals";
+                return View("Featured", latestProducts);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching latest products");
+                TempData["Error"] = "Failed to load latest products";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // Get products on sale - View
+        [HttpGet]
+        public async Task<IActionResult> OnSale(int count = 24)
+        {
+            try
+            {
+                _logger.LogInformation("Fetching {Count} products on sale", count);
+                var products = await _productService.GetAllProductsAsync();
+                var saleProducts = products.Where(p => p.DiscountPercentage > 0 && p.IsAvailable)
+                                           .OrderByDescending(p => p.DiscountPercentage)
+                                           .Take(count)
+                                           .ToList();
+                ViewBag.Title = "On Sale";
+                return View("Featured", saleProducts);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching sale products");
+                TempData["Error"] = "Failed to load sale products";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
         // Get featured products - AJAX/API
         [HttpGet]
         public async Task<IActionResult> GetFeaturedProducts(int count = 8)

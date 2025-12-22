@@ -1,0 +1,23 @@
+@model IEnumerable<Ecommerce.Core.Entities.Category>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var category in Model.Take(8))
+    {
+        <li>
+            <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.CategoryID">
+                <i class="bi bi-tag me-2"></i>@category.Name
+            </a>
+        </li>
+    }
+    <li><hr class="dropdown-divider"></li>
+    <li>
+        <a class="dropdown-item" asp-controller="Product" asp-action="Index">
+            <i class="bi bi-grid-3x3-gap me-2"></i>View All Categories
+        </a>
+    </li>
+}
+else
+{
+    <li><a class="dropdown-item disabled" href="#">No categories available</a></li>
+}
