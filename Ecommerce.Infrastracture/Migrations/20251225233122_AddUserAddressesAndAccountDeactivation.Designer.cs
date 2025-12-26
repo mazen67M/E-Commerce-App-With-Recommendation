@@ -4,6 +4,7 @@ using Ecommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251225233122_AddUserAddressesAndAccountDeactivation")]
+    partial class AddUserAddressesAndAccountDeactivation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -458,40 +461,6 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Ecommerce.Core.Entities.ProductImage", b =>
-                {
-                    b.Property<int>("ImageID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"));
-
-                    b.Property<string>("AltText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsPrimary")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ImageID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("ProductImages");
-                });
-
             modelBuilder.Entity("Ecommerce.Core.Entities.ProductTag", b =>
                 {
                     b.Property<int>("ProductTagID")
@@ -513,57 +482,6 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.HasIndex("TagID");
 
                     b.ToTable("ProductTags");
-                });
-
-            modelBuilder.Entity("Ecommerce.Core.Entities.ProductVariant", b =>
-                {
-                    b.Property<int>("VariantID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VariantID"));
-
-                    b.Property<string>("ColorCode")
-                        .HasMaxLength(7)
-                        .HasColumnType("nvarchar(7)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("PriceAdjustment")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SKU")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("StockQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VariantType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("VariantValue")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("VariantID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("ProductVariants");
                 });
 
             modelBuilder.Entity("Ecommerce.Core.Entities.PromoCode", b =>
@@ -1082,17 +1000,6 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Ecommerce.Core.Entities.ProductImage", b =>
-                {
-                    b.HasOne("Ecommerce.Core.Entities.Product", "Product")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Ecommerce.Core.Entities.ProductTag", b =>
                 {
                     b.HasOne("Ecommerce.Core.Entities.Product", "Product")
@@ -1110,17 +1017,6 @@ namespace Ecommerce.Infrastructure.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("Ecommerce.Core.Entities.ProductVariant", b =>
-                {
-                    b.HasOne("Ecommerce.Core.Entities.Product", "Product")
-                        .WithMany("ProductVariants")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Ecommerce.Core.Entities.Review", b =>
@@ -1298,11 +1194,7 @@ namespace Ecommerce.Infrastructure.Migrations
 
                     b.Navigation("OrderItems");
 
-                    b.Navigation("ProductImages");
-
                     b.Navigation("ProductTags");
-
-                    b.Navigation("ProductVariants");
 
                     b.Navigation("Reviews");
                 });

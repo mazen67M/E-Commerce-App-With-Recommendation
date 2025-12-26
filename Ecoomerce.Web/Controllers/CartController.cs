@@ -12,15 +12,18 @@ namespace Ecoomerce.Web.Controllers
     {
         private readonly ICartService _cartService;
         private readonly IProductService _productService;
+        private readonly IWishlistService _wishlistService;
         private readonly ILogger<CartController> _logger;
 
         public CartController(
             ICartService cartService,
             IProductService productService,
+            IWishlistService wishlistService,
             ILogger<CartController> logger)
         {
             _cartService = cartService;
             _productService = productService;
+            _wishlistService = wishlistService;
             _logger = logger;
         }
 
@@ -46,6 +49,8 @@ namespace Ecoomerce.Web.Controllers
                         item.ProductName = product.Name;
                         item.ImageURL = product.ImageURL;
                         item.UnitPrice = product.Price;
+                        item.IsAvailable = product.IsAvailable;
+                        item.StockQuantity = product.StockQuantity;
                     }
                 }
 
@@ -78,6 +83,13 @@ namespace Ecoomerce.Web.Controllers
                 if (string.IsNullOrEmpty(userId))
                 {
                     return Json(new { success = false, message = "User not authenticated" });
+                }
+
+                // Check stock limit
+                var product = await _productService.GetProductByIdAsync(productId);
+                if (product != null && quantity > product.StockQuantity)
+                {
+                    return Json(new { success = false, message = $"Only {product.StockQuantity} items available in stock" });
                 }
 
                 await _cartService.UpdateItemQuantityAsync(userId, productId, quantity);
@@ -156,5 +168,89 @@ namespace Ecoomerce.Web.Controllers
                 return Json(0);
             }
         }
+
+        // Save for Later (move to wishlist)
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveForLater(int productId)
+        {
+            try
+            {
+                var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Json(new { success = false, message = "User not authenticated" });
+                }
+
+                // Add to wishlist
+                await _wishlistService.AddToWishlistAsync(userId, productId);
+                
+                // Remove from cart
+                await _cartService.RemoveItemFromCartAsync(userId, productId);
+
+                return Json(new { success = true, message = "Item saved for later!" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving item for later");
+                return Json(new { success = false, message = "Failed to save item" });
+            }
+        }
+
+        // Mini Cart Preview (AJAX dropdown)
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> MiniCart()
+        {
+            try
+            {
+                var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Json(new { success = false, items = new object[0], total = 0, count = 0 });
+                }
+
+                var cart = await _cartService.GetOrCreateCartAsync(userId);
+                
+                // Get product details
+                var items = new List<object>();
+                decimal total = 0;
+                
+                foreach (var item in cart.Items.Take(5)) // Limit to 5 for mini cart
+                {
+                    var product = await _productService.GetProductByIdAsync(item.ProductID);
+                    if (product != null)
+                    {
+                        var itemTotal = product.Price * item.Quantity;
+                        total += itemTotal;
+                        items.Add(new
+                        {
+                            productId = item.ProductID,
+                            name = product.Name,
+                            imageUrl = product.ImageURL,
+                            price = product.Price,
+                            quantity = item.Quantity,
+                            total = itemTotal
+                        });
+                    }
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    items = items,
+                    total = total,
+                    count = cart.Items.Count,
+                    hasMore = cart.Items.Count > 5
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading mini cart");
+                return Json(new { success = false, items = new object[0], total = 0, count = 0 });
+            }
+        }
     }
 }
+

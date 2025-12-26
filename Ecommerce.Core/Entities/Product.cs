@@ -35,5 +35,7 @@ namespace Ecommerce.Core.Entities
         public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
         public virtual ICollection<InventoryLog> InventoryLogs { get; set; } = new List<InventoryLog>();
+        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
     }
 }

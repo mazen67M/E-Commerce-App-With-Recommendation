@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Deactivate Account";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Deactivate Account
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-x-circle me-2"></i>@TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading fw-bold">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Warning
+                        </h6>
+                        <p class="mb-0">Deactivating your account will:</p>
+                        <ul class="mb-0 mt-2">
+                            <li>Log you out immediately</li>
+                            <li>Prevent you from logging in</li>
+                            <li>Hide your profile from other users</li>
+                            <li>Keep your data for potential reactivation</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-muted">
+                        If you want to permanently delete your data, please contact support after deactivation.
+                    </p>
+
+                    <hr class="my-4" />
+
+                    <form asp-action="DeactivateAccountConfirm" method="post">
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-bold">Enter your password to confirm</label>
+                            <input type="password" class="form-control" id="password" name="password" required 
+                                   placeholder="Your current password" />
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger" 
+                                    onclick="return confirm('Are you absolutely sure you want to deactivate your account?');">
+                                <i class="bi bi-x-circle me-2"></i>Deactivate My Account
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Need help instead?</h6>
+                    <p class="text-muted mb-3">
+                        If something isn't working right or you're having issues, we'd love to help before you go.
+                    </p>
+                    <a asp-controller="Home" asp-action="Contact" asp-area="" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-chat-dots me-2"></i>Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

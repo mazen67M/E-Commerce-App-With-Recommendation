@@ -94,13 +94,26 @@ builder.Services.AddTransient<IEmailSenderService, SmtpEmailSenderService>();
 // File Upload Service Registration
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
-// Google Authentication (built into ASP.NET Core 8 - no extra package needed)
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "";
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "";
+    })
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Authentication:Facebook:AppId"] ?? "";
+        options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"] ?? "";
     });
+    // Note: Apple Sign-In requires AspNet.Security.OAuth.Apple package
+    // Uncomment when ready to implement:
+    // .AddApple(options =>
+    // {
+    //     options.ClientId = builder.Configuration["Authentication:Apple:ClientId"] ?? "";
+    //     options.KeyId = builder.Configuration["Authentication:Apple:KeyId"] ?? "";
+    //     options.TeamId = builder.Configuration["Authentication:Apple:TeamId"] ?? "";
+    // });
+
 var app = builder.Build();
 
 // Middleware

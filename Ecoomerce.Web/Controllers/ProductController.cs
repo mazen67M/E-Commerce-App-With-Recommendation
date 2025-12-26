@@ -31,12 +31,19 @@ namespace Ecoomerce.Web.Controllers
         }
 
         // Action for the main products page (handles searching and filtering)
-        public async Task<IActionResult> Index(string? searchTerm, int? categoryId, decimal? minPrice, decimal? maxPrice, string? sortBy, int page = 1)
+        public async Task<IActionResult> Index(string? searchTerm, int? categoryId, decimal? minPrice, decimal? maxPrice, string? sortBy, int page = 1, int pageSize = 12)
         {
             try 
             {
                 _logger.LogInformation("Fetching products with search term: {SearchTerm}, category ID: {CategoryId}, page: {Page}", searchTerm, categoryId, page);
                 
+                // Validate pageSize
+                pageSize = pageSize switch
+                {
+                    12 or 24 or 48 => pageSize,
+                    _ => 12
+                };
+
                 var products = await _productService.SearchProductAsync(searchTerm, categoryId);
                 
                 // Apply price filtering if specified
@@ -58,7 +65,6 @@ namespace Ecoomerce.Web.Controllers
                 };
 
                 // Pagination
-                const int pageSize = 12;
                 var totalProducts = products.Count();
                 var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
                 var paginatedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -72,7 +78,9 @@ namespace Ecoomerce.Web.Controllers
                     MaxPrice = maxPrice,
                     SortBy = sortBy,
                     CurrentPage = page,
-                    TotalPages = totalPages
+                    PageSize = pageSize,
+                    TotalPages = totalPages,
+                    TotalCount = totalProducts
                 };
                 
                 return View(viewModel);
@@ -84,6 +92,42 @@ namespace Ecoomerce.Web.Controllers
                 return View(new ProductSearchViewModel());
             }
         }
+
+        // Search Suggestions for Autocomplete
+        [HttpGet]
+        public async Task<IActionResult> SearchSuggestions(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query) || query.Length < 2)
+            {
+                return Json(new { suggestions = new object[0] });
+            }
+
+            try
+            {
+                var allProducts = await _productService.GetAllProductsAsync();
+                var suggestions = allProducts
+                    .Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                               (p.Description != null && p.Description.Contains(query, StringComparison.OrdinalIgnoreCase)))
+                    .Take(8)
+                    .Select(p => new
+                    {
+                        productId = p.ProductID,
+                        name = p.Name,
+                        price = p.Price,
+                        imageUrl = p.ImageURL,
+                        categoryName = p.CategoryName
+                    })
+                    .ToList();
+
+                return Json(new { suggestions });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in search suggestions");
+                return Json(new { suggestions = new object[0] });
+            }
+        }
+
 
         // Action for product details page
         public async Task<IActionResult> Details(int id)
@@ -99,9 +143,16 @@ namespace Ecoomerce.Web.Controllers
                     return NotFound();
                 }
 
+                // Track recently viewed products
+                AddToRecentlyViewed(id);
+
                 // Get recommended products (same category - using a simple approach for now)
                 var allProducts = await _productService.GetAllProductsAsync();
                 var recommendedProducts = allProducts.Where(p => p.CategoryName == product.CategoryName && p.ProductID != id).Take(4).ToList();
+
+                // Get recently viewed products
+                var recentlyViewedIds = GetRecentlyViewedIds().Where(rvId => rvId != id).Take(4);
+                var recentlyViewedProducts = allProducts.Where(p => recentlyViewedIds.Contains(p.ProductID)).ToList();
 
                 // Check if product is in wishlist (only for authenticated users)
                 bool isInWishlist = false;
@@ -118,6 +169,7 @@ namespace Ecoomerce.Web.Controllers
                 {
                     Product = product,
                     RecommendedProducts = recommendedProducts,
+                    RecentlyViewedProducts = recentlyViewedProducts,
                     IsInWishlist = isInWishlist
                 };
 
@@ -130,6 +182,39 @@ namespace Ecoomerce.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        // Helper method to add product to recently viewed
+        private void AddToRecentlyViewed(int productId)
+        {
+            var recentlyViewed = GetRecentlyViewedIds().ToList();
+            
+            // Remove if already exists
+            recentlyViewed.Remove(productId);
+            
+            // Add to beginning
+            recentlyViewed.Insert(0, productId);
+            
+            // Keep only last 10
+            if (recentlyViewed.Count > 10)
+                recentlyViewed = recentlyViewed.Take(10).ToList();
+            
+            // Store in cookie
+            Response.Cookies.Append("RecentlyViewed", string.Join(",", recentlyViewed), 
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddDays(30) });
+        }
+
+        // Helper method to get recently viewed product IDs
+        private IEnumerable<int> GetRecentlyViewedIds()
+        {
+            var cookie = Request.Cookies["RecentlyViewed"];
+            if (string.IsNullOrEmpty(cookie))
+                return Enumerable.Empty<int>();
+            
+            return cookie.Split(',')
+                .Where(s => int.TryParse(s, out _))
+                .Select(int.Parse);
+        }
+
 
         // Action for category-specific product listing
         public async Task<IActionResult> Category(int categoryId, int page = 1)

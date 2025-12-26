@@ -17,6 +17,8 @@ namespace Ecommerce.Application.ViewModels
         public decimal? MaxPrice { get; set; }
         public string? SortBy { get; set; } 
         public int CurrentPage { get; set; } = 1;
+        public int PageSize { get; set; } = 12;
         public int TotalPages { get; set; }
+        public int TotalCount { get; set; }
     }
 }

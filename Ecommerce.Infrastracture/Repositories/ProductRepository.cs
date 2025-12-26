@@ -99,6 +99,8 @@ namespace Ecommerce.Infrastructure.Repositories
                 .Include(p => p.Reviews)            // تحميل قائمة التقييمات
                 .Include(p => p.ProductTags)        // تحميل جدول الربط للـ Tags
                     .ThenInclude(pt => pt.Tag)      // ثم تحميل الـ Tag نفسه
+                .Include(p => p.ProductImages)      // تحميل صور المنتج
+                .Include(p => p.ProductVariants)    // تحميل الـ Variants (Size, Color)
                 .FirstOrDefaultAsync(p => p.ProductID == id);
         }
 

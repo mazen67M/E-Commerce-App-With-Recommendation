@@ -17,5 +17,9 @@ namespace Ecommerce.Application.DTOs.Cart
         public int Quantity { get; set; }
         public decimal Total => UnitPrice * Quantity;
         public ProductDto? Product { get; set; }
+        
+        // Stock information
+        public bool IsAvailable { get; set; } = true;
+        public int StockQuantity { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace Ecommerce.Application.ViewModels
     {
         public ProductDto Product { get; set; } = new();
         public List<ProductDto> RecommendedProducts { get; set; } = new();
+        public List<ProductDto> RecentlyViewedProducts { get; set; } = new();
         public bool IsInWishlist { get; set; }
         public ReviewDto NewReview { get; set; } = new(); // For the review form
     }

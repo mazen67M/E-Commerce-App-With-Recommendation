@@ -18,33 +18,31 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <form asp-action="Index" method="get" class="row g-3">
-                        <!-- Search Input -->
+                        <!-- Search Input with Autocomplete -->
                         <div class="col-md-4">
                             <label for="searchTerm" class="form-label">Search Products</label>
-                            <div class="input-group">
+                            <div class="input-group position-relative">
                                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                                 <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
-                                       value="@Model.SearchTerm" placeholder="Search by name or description...">
+                                       value="@Model.SearchTerm" placeholder="Search by name or description..."
+                                       autocomplete="off">
+                                <div id="searchSuggestions" class="dropdown-menu w-100 shadow" style="display: none; position: absolute; top: 100%; left: 0; z-index: 1000;"></div>
                             </div>
                         </div>
 
-                        <!-- Price Range -->
-                        <div class="col-md-2">
-                            <label for="minPrice" class="form-label">Min Price</label>
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="minPrice" name="minPrice" 
-                                       value="@Model.MinPrice" step="0.01" min="0" placeholder="0.00">
+                        <!-- Price Range Slider -->
+                        <div class="col-md-3">
+                            <label class="form-label">Price Range</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="number" class="form-control form-control-sm" id="minPrice" name="minPrice" 
+                                       value="@Model.MinPrice" min="0" placeholder="Min" style="width: 80px;">
+                                <span>-</span>
+                                <input type="number" class="form-control form-control-sm" id="maxPrice" name="maxPrice" 
+                                       value="@Model.MaxPrice" min="0" placeholder="Max" style="width: 80px;">
+                                <span class="text-muted small">L.E</span>
                             </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <label for="maxPrice" class="form-label">Max Price</label>
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="maxPrice" name="maxPrice" 
-                                       value="@Model.MaxPrice" step="0.01" min="0" placeholder="999.99">
-                            </div>
+                            <input type="range" class="form-range mt-2" id="priceSlider" min="0" max="10000" step="100"
+                                   value="@(Model.MaxPrice ?? 5000)">
                         </div>
 
                         <!-- Sort By -->
@@ -60,6 +58,16 @@
                             </select>
                         </div>
 
+                        <!-- Products Per Page -->
+                        <div class="col-md-1">
+                            <label for="pageSize" class="form-label">Show</label>
+                            <select class="form-select" id="pageSize" name="pageSize">
+                                <option value="12" selected="@(Model.PageSize == 12)">12</option>
+                                <option value="24" selected="@(Model.PageSize == 24)">24</option>
+                                <option value="48" selected="@(Model.PageSize == 48)">48</option>
+                            </select>
+                        </div>
+
                         <!-- Search Button -->
                         <div class="col-md-2 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary w-100">
@@ -71,6 +79,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Results Info -->
     <div class="row mb-3">
@@ -333,6 +342,66 @@
                     $(this).addClass('shadow-sm').removeClass('shadow-lg');
                 }
             );
+
+            // Price Slider functionality
+            var priceSlider = document.getElementById('priceSlider');
+            var maxPriceInput = document.getElementById('maxPrice');
+            
+            if (priceSlider) {
+                priceSlider.addEventListener('input', function() {
+                    maxPriceInput.value = this.value;
+                });
+            }
+
+            // Search Autocomplete
+            var searchInput = document.getElementById('searchTerm');
+            var suggestionsBox = document.getElementById('searchSuggestions');
+            var searchTimeout;
+
+            if (searchInput && suggestionsBox) {
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    var query = this.value.trim();
+                    
+                    if (query.length < 2) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+
+                    searchTimeout = setTimeout(function() {
+                        $.ajax({
+                            url: '@Url.Action("SearchSuggestions", "Product")',
+                            type: 'GET',
+                            data: { query: query },
+                            success: function(response) {
+                                if (response.suggestions && response.suggestions.length > 0) {
+                                    var html = '';
+                                    response.suggestions.forEach(function(item) {
+                                        html += '<a class="dropdown-item py-2" href="@Url.Action("Details", "Product")/' + item.productId + '">';
+                                        if (item.imageUrl) {
+                                            html += '<img src="' + item.imageUrl + '" class="me-2" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">';
+                                        }
+                                        html += '<span>' + item.name + '</span>';
+                                        html += '<small class="text-muted ms-2">' + item.price.toFixed(2) + ' L.E</small>';
+                                        html += '</a>';
+                                    });
+                                    suggestionsBox.innerHTML = html;
+                                    suggestionsBox.style.display = 'block';
+                                } else {
+                                    suggestionsBox.style.display = 'none';
+                                }
+                            }
+                        });
+                    }, 300);
+                });
+
+                // Hide suggestions when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                        suggestionsBox.style.display = 'none';
+                    }
+                });
+            }
         });
     </script>
 }

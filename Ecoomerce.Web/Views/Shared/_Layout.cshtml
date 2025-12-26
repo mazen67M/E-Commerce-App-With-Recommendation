@@ -125,8 +125,15 @@
                                         <i class="bi bi-speedometer2 me-2"></i>My Dashboard</a></li>
                                     <li><a class="dropdown-item" asp-area="Profile" asp-controller="OrderHistory" asp-action="Index">
                                         <i class="bi bi-receipt me-2"></i>Order History</a></li>
+                                    <li><a class="dropdown-item" asp-area="Profile" asp-controller="Wishlist" asp-action="Index">
+                                        <i class="bi bi-heart me-2"></i>My Wishlist</a></li>
+                                    <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-area="Profile" asp-controller="ManageProfile" asp-action="Index">
                                         <i class="bi bi-person me-2"></i>Profile Settings</a></li>
+                                    <li><a class="dropdown-item" asp-area="Profile" asp-controller="Address" asp-action="Index">
+                                        <i class="bi bi-geo-alt me-2"></i>Address Book</a></li>
+                                    <li><a class="dropdown-item" asp-area="Profile" asp-controller="TwoFactor" asp-action="Index">
+                                        <i class="bi bi-shield-lock me-2"></i>Two-Factor Auth</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">

@@ -27,5 +27,10 @@ namespace Ecommerce.Core.Entities
         public virtual Wishlist Wishlist { get; set; }
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<UserAddress> Addresses { get; set; } = new List<UserAddress>();
+        
+        // Account status
+        public bool IsDeactivated { get; set; } = false;
+        public DateTime? DeactivatedAt { get; set; }
     }
 }

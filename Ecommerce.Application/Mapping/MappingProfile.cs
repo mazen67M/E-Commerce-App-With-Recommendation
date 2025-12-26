@@ -30,7 +30,15 @@ namespace Ecommerce.Application.Mapping
                 .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Brand != null ? src.Brand.Name : null))
                 .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Reviews != null && src.Reviews.Any() ? src.Reviews.Average(r => r.Rating) : 0))
                 .ForMember(dest => dest.ReviewCount, opt => opt.MapFrom(src => src.Reviews != null ? src.Reviews.Count : 0))
-                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.ProductTags != null ? src.ProductTags.Select(pt => pt.Tag.Name) : new List<string>()));
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.ProductTags != null ? src.ProductTags.Select(pt => pt.Tag.Name) : new List<string>()))
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages != null ? src.ProductImages.OrderBy(i => i.DisplayOrder) : null))
+                .ForMember(dest => dest.Variants, opt => opt.MapFrom(src => src.ProductVariants != null ? src.ProductVariants.OrderBy(v => v.DisplayOrder) : null));
+
+            // ProductImage mapping
+            CreateMap<ProductImage, ProductImageDto>();
+            
+            // ProductVariant mapping
+            CreateMap<ProductVariant, ProductVariantDto>();
 
             CreateMap<Category, CategoryDto>()
                 .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategory != null ? src.ParentCategory.Name : null))
@@ -55,9 +63,19 @@ namespace Ecommerce.Application.Mapping
                 .ForMember(dest => dest.ProductTags, opt => opt.Ignore())
                 .ForMember(dest => dest.CartItems, opt => opt.Ignore())
                 .ForMember(dest => dest.OrderItems, opt => opt.Ignore())
-                .ForMember(dest => dest.InventoryLogs, opt => opt.Ignore());
+                .ForMember(dest => dest.InventoryLogs, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductImages, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductVariants, opt => opt.Ignore());
 
-            CreateMap<Product, EditProductViewModel>();
+            CreateMap<Product, EditProductViewModel>()
+                .ForMember(dest => dest.Categories, opt => opt.Ignore())
+                .ForMember(dest => dest.Brands, opt => opt.Ignore())
+                .ForMember(dest => dest.Tags, opt => opt.Ignore())
+                .ForMember(dest => dest.SelectedTagIds, opt => opt.MapFrom(src => src.ProductTags != null ? src.ProductTags.Select(pt => pt.TagID) : new List<int>()))
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages))
+                .ForMember(dest => dest.Variants, opt => opt.MapFrom(src => src.ProductVariants))
+                .ForMember(dest => dest.NewImageUrls, opt => opt.Ignore())
+                .ForMember(dest => dest.NewVariants, opt => opt.Ignore());
 
             // --- Cart Mappings ---
             CreateMap<Cart, CartDto>();

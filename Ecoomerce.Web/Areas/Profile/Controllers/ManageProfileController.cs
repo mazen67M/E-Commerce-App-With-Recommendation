@@ -169,5 +169,52 @@ namespace Ecommerce.Web.Areas.Profile.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // GET: Profile/ManageProfile/DeactivateAccount
+        [HttpGet]
+        [Route("DeactivateAccount")]
+        public IActionResult DeactivateAccount()
+        {
+            return View();
+        }
+
+        // POST: Profile/ManageProfile/DeactivateAccount
+        [HttpPost]
+        [Route("DeactivateAccount")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeactivateAccountConfirm(string password)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Verify password
+            var passwordValid = await _userManager.CheckPasswordAsync(user, password);
+            if (!passwordValid)
+            {
+                TempData["ErrorMessage"] = "Incorrect password. Please try again.";
+                return View("DeactivateAccount");
+            }
+
+            // Deactivate account (soft delete)
+            user.IsDeactivated = true;
+            user.DeactivatedAt = DateTime.UtcNow;
+            user.LockoutEnabled = true;
+            user.LockoutEnd = DateTimeOffset.MaxValue; // Lock forever
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                // Sign out
+                await _signInManager.SignOutAsync();
+                TempData["SuccessMessage"] = "Your account has been deactivated. You can reactivate it by contacting support.";
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            TempData["ErrorMessage"] = "Failed to deactivate account. Please try again.";
+            return View("DeactivateAccount");
+        }
     }
 }

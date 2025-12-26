@@ -26,6 +26,9 @@ namespace Ecommerce.Infrastructure.Data
         public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<InventoryLog> InventoryLogs { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductVariant> ProductVariants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

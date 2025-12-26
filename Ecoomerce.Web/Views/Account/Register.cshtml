@@ -2,84 +2,415 @@
 @model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
+    Layout = null;
 }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-7 col-md-9">
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header bg-success bg-gradient text-white text-center rounded-top-4">
-                    <h2 class="mb-0"><i class="bi bi-person-plus me-2"></i> Create Your Account</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - E-Commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .register-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .register-illustration {
+            flex: 1;
+            background: linear-gradient(180deg, #86EFAC 0%, #22C55E 50%, #16A34A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .register-illustration::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .register-illustration img {
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.2));
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .register-form-section {
+            flex: 1;
+            background: linear-gradient(180deg, #f8f9fc 0%, #e9ecef 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 3rem;
+            position: relative;
+            overflow-y: auto;
+        }
+        
+        .login-link-top {
+            position: absolute;
+            top: 2rem;
+            right: 3rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .login-link-top a {
+            color: #22c55e;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .login-link-top a:hover {
+            color: #16a34a;
+            text-decoration: underline;
+        }
+        
+        .register-form-wrapper {
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .register-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .register-header p {
+            color: #6b7280;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-floating-custom {
+            margin-bottom: 1rem;
+        }
+        
+        .form-floating-custom label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .form-floating-custom input {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+        }
+        
+        .form-floating-custom input:focus {
+            outline: none;
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.15);
+        }
+        
+        .form-floating-custom input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .password-wrapper {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .btn-register {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            margin-top: 1rem;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(34, 197, 94, 0.45);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        
+        .divider span {
+            padding: 0 1rem;
+        }
+        
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .social-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .social-btn.google { color: #ea4335; }
+        .social-btn.apple { color: #000; }
+        .social-btn.facebook { color: #1877f2; }
+        
+        .social-btn svg, .social-btn i {
+            font-size: 1.5rem;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .text-danger {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        
+        @@media (max-width: 992px) {
+            .register-container {
+                flex-direction: column;
+            }
+            
+            .register-illustration {
+                min-height: 250px;
+                padding: 1.5rem;
+            }
+            
+            .register-illustration img {
+                max-height: 200px;
+            }
+            
+            .register-form-section {
+                padding: 1.5rem;
+            }
+            
+            .login-link-top {
+                position: static;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Left Section - Illustration -->
+        <div class="register-illustration">
+            <img src="~/images/Register.png" alt="Register Illustration" />
+        </div>
+        
+        <!-- Right Section - Form -->
+        <div class="register-form-section">
+            <div class="login-link-top">
+                Already a member? <a asp-action="Login">Sign in</a>
+            </div>
+            
+            <div class="register-form-wrapper">
+                <div class="register-header">
+                    <h1>Create Account</h1>
+                    <p>Join our community and start shopping!</p>
                 </div>
-                <div class="card-body px-4 py-4">
-                    <form asp-action="Register" method="post" asp-controller="Account" autocomplete="off">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-1 small mb-4"></div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label asp-for="Email" class="form-label fw-semibold">Email</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input asp-for="Email" type="email" class="form-control" placeholder="you@email.com" aria-label="Email" />
-                                </div>
-                                <span asp-validation-for="Email" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="FirstName" class="form-label fw-semibold">First Name</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input asp-for="FirstName" class="form-control" placeholder="First Name" aria-label="First Name" />
-                                </div>
-                                <span asp-validation-for="FirstName" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="LastName" class="form-label fw-semibold">Last Name</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input asp-for="LastName" class="form-control" placeholder="Last Name" aria-label="Last Name" />
-                                </div>
-                                <span asp-validation-for="LastName" class="text-danger small"></span>
-                            </div>
-                            <!-- Optional: Role or other fields here -->
-                            <div class="col-md-6 d-none">
-                                <label class="form-label fw-semibold">Role</label>
-                                <div class="input-group">
-                                    <!-- Placeholder for role selection -->
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="Password" class="form-label fw-semibold">Password</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                    <input asp-for="Password" type="password" class="form-control" placeholder="Password" aria-label="Password" />
-                                </div>
-                                <span asp-validation-for="Password" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" />
-                                </div>
-                                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
-                            </div>
+                
+                <form asp-action="Register" method="post" asp-controller="Account" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    
+                    <div class="form-row">
+                        <div class="form-floating-custom">
+                            <label asp-for="FirstName">First Name</label>
+                            <input asp-for="FirstName" placeholder="John" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-success btn-lg fw-semibold shadow-sm">
-                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                <i class="bi bi-check-circle me-1"></i> Create Account
-                            </button>
+                        
+                        <div class="form-floating-custom">
+                            <label asp-for="LastName">Last Name</label>
+                            <input asp-for="LastName" placeholder="Doe" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
                         </div>
+                    </div>
+                    
+                    <div class="form-floating-custom">
+                        <label asp-for="Email">Email Address</label>
+                        <input asp-for="Email" type="email" placeholder="you@example.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-floating-custom">
+                            <label asp-for="Password">Password</label>
+                            <div class="password-wrapper">
+                                <input asp-for="Password" type="password" id="password" placeholder="••••••••" />
+                                <button type="button" class="password-toggle" onclick="togglePassword('password', 'toggleIcon1')">
+                                    <i class="bi bi-eye-slash" id="toggleIcon1"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating-custom">
+                            <label asp-for="ConfirmPassword">Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input asp-for="ConfirmPassword" type="password" id="confirmPassword" placeholder="••••••••" />
+                                <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', 'toggleIcon2')">
+                                    <i class="bi bi-eye-slash" id="toggleIcon2"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-register">
+                        <i class="bi bi-person-plus me-2"></i>Create Account
+                    </button>
+                </form>
+                
+                <div class="divider">
+                    <span>Or sign up with</span>
+                </div>
+                
+                <div class="social-buttons">
+                    <form asp-action="ExternalLogin" method="post" style="display: inline;">
+                        <input type="hidden" name="provider" value="Google" />
+                        <button type="submit" class="social-btn google" title="Sign up with Google">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                        </button>
                     </form>
-                </div>
-                <div class="card-footer bg-white text-center rounded-bottom-4 py-3">
-                    <span class="me-2">Already have an account?</span>
-                    <a asp-action="Login" class="fw-semibold text-success text-decoration-none">Login</a>
+                    
+                    <form asp-action="ExternalLogin" method="post" style="display: inline;">
+                        <input type="hidden" name="provider" value="Apple" />
+                        <button type="submit" class="social-btn apple" title="Sign up with Apple">
+                            <i class="bi bi-apple"></i>
+                        </button>
+                    </form>
+                    
+                    <form asp-action="ExternalLogin" method="post" style="display: inline;">
+                        <input type="hidden" name="provider" value="Facebook" />
+                        <button type="submit" class="social-btn facebook" title="Sign up with Facebook">
+                            <i class="bi bi-facebook"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        }
+    </script>
+</body>
+</html>

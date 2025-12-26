@@ -1,0 +1,112 @@
+@model Ecommerce.Application.ViewModels.Profile.AddressViewModel
+@{
+    ViewData["Title"] = "Add New Address";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-geo-alt me-2"></i>Add New Address
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="AddressName" class="form-label"></label>
+                                <select asp-for="AddressName" class="form-select">
+                                    <option value="Home">Home</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Office">Office</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="AddressName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="RecipientName" class="form-label"></label>
+                                <input asp-for="RecipientName" class="form-control" placeholder="Full name of recipient" />
+                                <span asp-validation-for="RecipientName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label"></label>
+                                <input asp-for="Phone" class="form-control" placeholder="Phone number" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="AddressLine1" class="form-label"></label>
+                                <input asp-for="AddressLine1" class="form-control" placeholder="Street address, building, apartment" />
+                                <span asp-validation-for="AddressLine1" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="AddressLine2" class="form-label"></label>
+                                <input asp-for="AddressLine2" class="form-control" placeholder="Additional details (optional)" />
+                                <span asp-validation-for="AddressLine2" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="City" class="form-label"></label>
+                                <input asp-for="City" class="form-control" placeholder="City" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="State" class="form-label"></label>
+                                <input asp-for="State" class="form-control" placeholder="State/Province" />
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PostalCode" class="form-label"></label>
+                                <input asp-for="PostalCode" class="form-control" placeholder="Postal/ZIP code" />
+                                <span asp-validation-for="PostalCode" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Country" class="form-label"></label>
+                                <input asp-for="Country" class="form-control" placeholder="Country" />
+                                <span asp-validation-for="Country" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <hr class="my-3" />
+                                <div class="form-check mb-2">
+                                    <input asp-for="IsDefaultShipping" class="form-check-input" />
+                                    <label asp-for="IsDefaultShipping" class="form-check-label">
+                                        <i class="bi bi-truck me-1"></i>Set as default shipping address
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="IsDefaultBilling" class="form-check-input" />
+                                    <label asp-for="IsDefaultBilling" class="form-check-label">
+                                        <i class="bi bi-credit-card me-1"></i>Set as default billing address
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <hr class="my-3" />
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-check-lg me-2"></i>Save Address
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
